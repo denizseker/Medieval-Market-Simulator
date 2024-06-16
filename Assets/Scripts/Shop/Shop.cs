@@ -19,6 +19,7 @@ public class Shop : MonoBehaviour
     [SerializeField] protected List<Rack> rackList = new List<Rack>();
     protected CustomerQueue customerQue;
     public Transform workerSalePos;
+    public Transform stallSlotPos;
 
     public bool IsShopHaveItem(SO_Item _SOItem)
     {
@@ -35,19 +36,26 @@ public class Shop : MonoBehaviour
 
     public Transform ReturnItemPickUpPos(SO_Item _SOItem)
     {
+        //Checking every rack in shop
         for (int i = 0; i < rackList.Count; i++)
         {
+            //Checking each rack's slots
             for (int j = 0; j < rackList[i].slotList.Count; j++)
             {
-                Debug.Log("1"+ rackList[i]);
-                Debug.Log("2" + rackList[i].slotList[j]);
-                Debug.Log("3" + rackList[i].slotList[j]._item._SOItem);
-                if (rackList[i].slotList[j]._item._SOItem == _SOItem)
+                //if slot have any item
+                if(!rackList[i].slotList[j]._isEmpty)
                 {
-                    return rackList[i].slotList[j].transform;
+                    //if slot have that spesific item
+                    if (rackList[i].slotList[j]._item._SOItem == _SOItem)
+                    {
+                        //returning slot transform so worker can go there and pick up that item.
+                        return rackList[i].slotList[j].transform;
+                    }
                 }
+                
             }
         }
+        //cant find that spesific item in any rack at this shop.
         return null;
     }
 

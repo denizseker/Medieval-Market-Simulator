@@ -5,21 +5,14 @@ using DG.Tweening;
 
 public class NPC_Worker : NPC
 {
-    private Shop shop;
+    public Shop shop;
     private CustomerQueue customerQue;
     private NPC_Customer currentCustomer;
     private void Start()
     {
         state = NPCState.WaitingForCustomer;
-        shop = GetComponentInParent<Shop>();
         customerQue = shop.GetComponentInChildren<CustomerQueue>();
     }
-
-    private void TakeItemFromRack(SO_Item _SOItem)
-    {
-
-    }
-
     private void NPCAI_Worker()
     {
         switch (state)
@@ -40,7 +33,6 @@ public class NPC_Worker : NPC
                 //If there is customer and its ready to buy (animations over and customer in 1st place on que)
                 if(!customerQue.queSlotList[0]._isSlotEmpty && customerQue.queSlotList[0].npc.state == NPCState.WaitingForWorker)
                 {
-                    Debug.Log("Customer came and waiting for item.");
                     currentCustomer = customerQue.queSlotList[0].npc;
                     state = NPCState.HandlingCustomer;
                 }
@@ -64,16 +56,15 @@ public class NPC_Worker : NPC
                     Item _item = shop.ReturnItemPickUpPos(currentCustomer.wantedSOItem).GetComponent<Slot>()._item;
                     Sequence mySequence = DOTween.Sequence();
                     mySequence.Append(transform.DOLookAt(shop.ReturnItemPickUpPos(currentCustomer.wantedSOItem).position, 0.5f,AxisConstraint.Y))
-                    //.Append(_item.transform.DOMove(handPos.transform.position,0.3f))
                     .OnComplete(() =>
                     {
                         PickItem();
                         _item.PickUp(handPos);
-                        Debug.Log("Took item");
+                        itemInHand = _item;
                         state = NPCState.ReturningFromRackWithItem;
+                        mySequence.Kill();
                     });
                     state = NPCState.Idle;
-                    
                 }
                 break;
             case NPCState.ReturningFromRackWithItem:
@@ -81,14 +72,43 @@ public class NPC_Worker : NPC
                 if (!isPickDropAnimPlaying)
                 {
                     MoveTo(shop.workerSalePos);
+                    state = NPCState.GiveItemToCustomer;
                 }
+                break;
+            case NPCState.GiveItemToCustomer:
                 
+                if (agent.remainingDistance < 0.1f)
+                {
+                    if (!isPickDropAnimPlaying)
+                    {
+                        PlaceItemToStall();
+                        state = NPCState.Walking;
+                    }
+                }
                 break;
             default:
                 break;
         }
     }
-
+    private void PlaceItemToStall()
+    {
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Append(transform.DOLookAt(shop.stallSlotPos.position, 0.5f, AxisConstraint.Y))
+        .OnComplete(() =>
+        {
+            DropItem();
+            itemInHand.transform.parent = null;
+            itemInHand.transform.DOMove(shop.stallSlotPos.position, 0.5f)
+            .OnComplete(() => 
+            {
+                shop.stallSlotPos.GetComponent<Slot_Stall>()._item = itemInHand;
+                shop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = false;
+                itemInHand = null;
+            });
+            state = NPCState.Idle;
+            mySequence.Kill();
+        });
+    }
     private void Update()
     {
         NPCAI_Worker();

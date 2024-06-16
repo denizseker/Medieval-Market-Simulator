@@ -31,7 +31,8 @@ public class Rack_Weapon : Rack
                         _item.transform.parent.GetComponent<Slot>()._isEmpty = false;
                         GetComponentInParent<Shop>().itemList.Add(_item);
                         _player.GetComponent<PlayerController>()._itemInHand = null;
-                        
+                        mySequence.Kill();
+
                     });
             }
         }

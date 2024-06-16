@@ -57,6 +57,14 @@ public class NPC_Customer : NPC
                 
                 break;
             case NPCState.WaitingForWorker:
+                if (!targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty)
+                {
+                    PickItem();
+                    Item _item = targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item;
+                    _item.PickUp(handPos);
+                    itemInHand = _item;
+                    state = NPCState.Idle;
+                }
                 break;
             default:
                 break;

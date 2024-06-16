@@ -18,14 +18,16 @@ public class NPC : MonoBehaviour
         HandlingCustomer,
         TakingItemFromRack,
         ReturningFromRackWithItem,
+        GiveItemToCustomer,
     }
 
     public NPCState state;
-    public float range = 10.0f;
+    public float range = 50.0f;
     protected NavMeshAgent agent;
     protected Animator animator;
     protected Shop targetShop;
     public Transform handPos;
+    public Item itemInHand;
     //Pick or drop animation boolean. Animator behaviour controlling this boolean if its playing or not.
     [HideInInspector] public bool isPickDropAnimPlaying;
 
