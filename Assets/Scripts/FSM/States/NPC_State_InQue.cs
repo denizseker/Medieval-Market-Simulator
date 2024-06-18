@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class NPC_State_InQue : NPCState
 {
+    NPC_Customer customer;
+
     public NPC_State_InQue(NPC _npc, NPCStateMachine _npcStateMachine) : base(_npc, _npcStateMachine)
     {
     }
@@ -17,9 +19,10 @@ public class NPC_State_InQue : NPCState
     public override void EnterState()
     {
         base.EnterState();
-
+        customer = npc.GetComponent<NPC_Customer>();
         if (npc.targetShop.WhichPlaceAtQue(npc) == 0)
         {
+            ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "Þu aletten 1 tane getir hele.");
             npc.transform.DOLookAt(npc.targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
             .OnComplete(() =>
             {

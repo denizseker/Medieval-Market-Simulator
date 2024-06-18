@@ -20,8 +20,6 @@ public class NPC_State_WaitForWorker : NPCState
     {
         base.EnterState();
         customer = npc.GetComponent<NPC_Customer>();
-        Debug.Log(customer.wantToBuy);
-        ChatBubble.Create(npc.gameObject.transform, new Vector3(0, 2, 0), customer.wantToBuy,"Sundan sar 1 tane kocum.");
     }
 
     public override void ExitState()
@@ -41,6 +39,8 @@ public class NPC_State_WaitForWorker : NPCState
             npc.targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item = null;
             npc.itemInHand = _item;
             npc.targetShop.GetComponentInChildren<CustomerQueue>().RemoveCustomerFromQue(npc.GetComponent<NPC_Customer>());
+
+            ChatBubble.Create(npc.transform, "CcC dILdAr iS HerE CcC");
         }
     }
 }

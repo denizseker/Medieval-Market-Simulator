@@ -19,8 +19,9 @@ public class NPC_State_GiveItemToCustomer : NPCState
         base.EnterState();
 
         worker = npc.GetComponent<NPC_Worker>();
-
         worker.PlaceItemToStall();
+
+        ChatBubble.Create(npc.transform, "Evir çevir götüne sok");
 
     }
 
