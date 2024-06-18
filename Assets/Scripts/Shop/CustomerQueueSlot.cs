@@ -6,5 +6,4 @@ public class CustomerQueueSlot : MonoBehaviour
 {
     public bool _isSlotEmpty;
     public NPC_Customer npc;
-
 }

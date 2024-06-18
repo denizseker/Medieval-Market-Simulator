@@ -19,6 +19,7 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     [HideInInspector] public string itemDesc;
     [HideInInspector] public int itemMaxStackCount;
     [HideInInspector] public bool isItemStackable;
+    [HideInInspector] public bool isItemInRack;
     public SO_Item _SOItem;
     private void Awake()
     {
@@ -45,14 +46,15 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     {
         //trigger false for unwanted collisions
         GetComponent<Collider>().isTrigger = true;
-
         //if item already in rack
-        if(transform.parent != null)
+        if (isItemInRack)
         {
             //Setting slot to empty
             transform.parent.GetComponent<Slot>()._isEmpty = true;
+            transform.parent.GetComponent<Slot>()._item = null;
             //Removing item from shop item list
             transform.GetComponentInParent<Shop>().RemoveItemFromList(this);
+            isItemInRack = false;
         }
         //Item's parent is hand pos
         transform.parent = _handPos.transform;

@@ -5,13 +5,14 @@ using DG.Tweening;
 
 public class NPC_Worker : NPC
 {
-    public Shop shop;
-    private CustomerQueue customerQue;
-    private NPC_Customer currentCustomer;
+    [HideInInspector] public CustomerQueue customerQue;
+    [HideInInspector] public NPC_Customer currentCustomer;
     private void Start()
     {
+        StateMachine.Initialize(WaitForCustomerState);
         state = NPCState.WaitingForCustomer;
-        customerQue = shop.GetComponentInChildren<CustomerQueue>();
+        customerQue = targetShop.GetComponentInChildren<CustomerQueue>();
+        currentCustomer = null;
     }
     private void NPCAI_Worker()
     {
@@ -30,19 +31,26 @@ public class NPC_Worker : NPC
             case NPCState.WaitingForWorker:
                 break;
             case NPCState.WaitingForCustomer:
+                Debug.Log("Biri var mý kontrol");
                 //If there is customer and its ready to buy (animations over and customer in 1st place on que)
-                if(!customerQue.queSlotList[0]._isSlotEmpty && customerQue.queSlotList[0].npc.state == NPCState.WaitingForWorker)
+                if (!customerQue.queSlotList[0]._isSlotEmpty && customerQue.queSlotList[0].npc.state == NPCState.WaitingForWorker)
                 {
-                    currentCustomer = customerQue.queSlotList[0].npc;
-                    state = NPCState.HandlingCustomer;
+                    Debug.Log("Müþteri bulundu");
+                    if (currentCustomer != customerQue.queSlotList[0].npc)
+                    {
+                        //Debug.Log(customerQue.queSlotList[0].npc);
+                        Debug.Log("Ayný deðil iþe baþla");
+                        currentCustomer = customerQue.queSlotList[0].npc;
+                        state = NPCState.HandlingCustomer;
+                    }
                 }
                 break;
             case NPCState.HandlingCustomer:
                 //Checking if shop have that item on sale.
-                if (shop.IsShopHaveItem(currentCustomer.wantedSOItem))
+                if (targetShop.IsShopHaveItem(currentCustomer.wantToBuy))
                 {
                     //Get the item from rack and give to customer.
-                    MoveTo(shop.ReturnItemPickUpPos(currentCustomer.wantedSOItem));
+                    MoveTo(targetShop.ReturnItemPickUpPos(currentCustomer.wantToBuy));
                     state = NPCState.TakingItemFromRack;
                 }
                 else
@@ -51,11 +59,11 @@ public class NPC_Worker : NPC
                 }
                 break;
             case NPCState.TakingItemFromRack:
-                if (agent.remainingDistance < 0.1f)
+                if (agent.remainingDistance < 0.1f && !agent.pathPending)
                 {
-                    Item _item = shop.ReturnItemPickUpPos(currentCustomer.wantedSOItem).GetComponent<Slot>()._item;
+                    Item _item = targetShop.ReturnItemPickUpPos(currentCustomer.wantToBuy).GetComponent<Slot>()._item;
                     Sequence mySequence = DOTween.Sequence();
-                    mySequence.Append(transform.DOLookAt(shop.ReturnItemPickUpPos(currentCustomer.wantedSOItem).position, 0.5f,AxisConstraint.Y))
+                    mySequence.Append(transform.DOLookAt(targetShop.ReturnItemPickUpPos(currentCustomer.wantToBuy).position, 0.5f,AxisConstraint.Y))
                     .OnComplete(() =>
                     {
                         PickItem();
@@ -64,25 +72,24 @@ public class NPC_Worker : NPC
                         state = NPCState.ReturningFromRackWithItem;
                         mySequence.Kill();
                     });
-                    state = NPCState.Idle;
+                    state = NPCState.PlayingAnim;
                 }
                 break;
             case NPCState.ReturningFromRackWithItem:
                 //Dont move till pick or drop animation finish
                 if (!isPickDropAnimPlaying)
                 {
-                    MoveTo(shop.workerSalePos);
+                    MoveTo(targetShop.workerSalePos);
                     state = NPCState.GiveItemToCustomer;
                 }
                 break;
             case NPCState.GiveItemToCustomer:
                 
-                if (agent.remainingDistance < 0.1f)
+                if (agent.remainingDistance < 0.1f && !agent.pathPending)
                 {
                     if (!isPickDropAnimPlaying)
                     {
                         PlaceItemToStall();
-                        state = NPCState.Walking;
                     }
                 }
                 break;
@@ -90,28 +97,29 @@ public class NPC_Worker : NPC
                 break;
         }
     }
-    private void PlaceItemToStall()
+    public void PlaceItemToStall()
     {
         Sequence mySequence = DOTween.Sequence();
-        mySequence.Append(transform.DOLookAt(shop.stallSlotPos.position, 0.5f, AxisConstraint.Y))
+        mySequence.Append(transform.DOLookAt(targetShop.stallSlotPos.position, 0.5f, AxisConstraint.Y))
         .OnComplete(() =>
         {
             DropItem();
             itemInHand.transform.parent = null;
-            itemInHand.transform.DOMove(shop.stallSlotPos.position, 0.5f)
+            itemInHand.transform.DOMove(targetShop.stallSlotPos.position, 0.5f)
             .OnComplete(() => 
             {
-                shop.stallSlotPos.GetComponent<Slot_Stall>()._item = itemInHand;
-                shop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = false;
+                targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item = itemInHand;
+                targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = false;
                 itemInHand = null;
             });
-            state = NPCState.Idle;
+            state = NPCState.WaitingForCustomer;
             mySequence.Kill();
         });
     }
     private void Update()
     {
-        NPCAI_Worker();
+        StateMachine.CurrentNPCState.FrameUpdate();
+        //NPCAI_Worker();
 
         if (agent.enabled && !agent.hasPath && !agent.pathPending && agent.remainingDistance == 0 && (animator.GetBool("Walking") || animator.GetBool("CarryWalk")))
         {

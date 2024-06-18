@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public List<SO_Item> SOItemList = new List<SO_Item>();
     public List<NPC_Customer> npcCustomerList = new List<NPC_Customer>();
 
+    public Transform chatBubble;
 
     public Shop GetShopForCustomer(NPC_Customer _npc)
     {
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    private void Deneme()
+    private void SetCustomerToShop()
     {
         for (int i = 0; i < npcCustomerList.Count; i++)
         {
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Deneme();
+            SetCustomerToShop();
         }
     }
 }

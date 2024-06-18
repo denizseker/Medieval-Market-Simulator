@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
+using TMPro;
 
 public class NPC : MonoBehaviour
 {
@@ -19,21 +20,52 @@ public class NPC : MonoBehaviour
         TakingItemFromRack,
         ReturningFromRackWithItem,
         GiveItemToCustomer,
+        WaitingForQue,
+        PlayingAnim,
     }
 
-    public NPCState state;
-    public float range = 50.0f;
-    protected NavMeshAgent agent;
-    protected Animator animator;
-    protected Shop targetShop;
+    public NPCStateMachine StateMachine;
+    public NPC_State_Idle IdleState;
+    public NPC_State_InQue InQueState;
+    public NPC_State_PickUp PickUpState;
+    public NPC_State_WaitForCustomer WaitForCustomerState;
+    public NPC_State_WaitForWorker WaitForWorkerState;
+    public NPC_State_HandleCustomer HandleCustomerState;
+    public NPC_State_ReturnFromRackWithItem ReturnFromRackWithItemState;
+    public NPC_State_GiveItemToCustomer GiveItemToCustomerState;
+    private void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
+    {
+        //fill
+    }
+    public enum AnimationTriggerType
+    {
+        PickUp,
+        Drop,
+    }
+    public TMP_Text stateText;
+    [HideInInspector] public NPCState state;
+    [HideInInspector] public float range = 50.0f;
+    [HideInInspector] public NavMeshAgent agent;
+    [HideInInspector] public Animator animator;
+    public Shop targetShop;
     public Transform handPos;
-    public Item itemInHand;
+    [HideInInspector] public Item itemInHand;
     //Pick or drop animation boolean. Animator behaviour controlling this boolean if its playing or not.
     [HideInInspector] public bool isPickDropAnimPlaying;
 
-    protected bool _pickedSomething;
+    [HideInInspector] public bool _pickedSomething;
     private void Awake()
     {
+        StateMachine = new NPCStateMachine();
+        IdleState = new NPC_State_Idle(this, StateMachine);
+        InQueState = new NPC_State_InQue(this, StateMachine);
+        PickUpState = new NPC_State_PickUp(this, StateMachine);
+        WaitForCustomerState = new NPC_State_WaitForCustomer(this, StateMachine);
+        WaitForWorkerState = new NPC_State_WaitForWorker(this, StateMachine);
+        HandleCustomerState = new NPC_State_HandleCustomer(this, StateMachine);
+        ReturnFromRackWithItemState = new NPC_State_ReturnFromRackWithItem(this, StateMachine);
+        GiveItemToCustomerState = new NPC_State_GiveItemToCustomer(this, StateMachine);
+
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
@@ -55,7 +87,7 @@ public class NPC : MonoBehaviour
     }
 
     //Calling when pickup anim start
-    protected void PickItem()
+    public void PickItem()
     {
         isPickDropAnimPlaying = true;
         animator.Play("PickUp");
@@ -63,7 +95,7 @@ public class NPC : MonoBehaviour
         agent.speed = 0.9f;
     }
     //Calling when drop anim start
-    protected void DropItem()
+    public void DropItem()
     {
         if (_pickedSomething)
         {
@@ -85,12 +117,5 @@ public class NPC : MonoBehaviour
         {
             animator.SetBool("Walking", true);
         }
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

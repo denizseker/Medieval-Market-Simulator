@@ -6,19 +6,22 @@ using DG.Tweening;
 public class NPC_Customer : NPC
 {
 
-    public SO_Item wantedSOItem;
+    [HideInInspector] public SO_Item wantToBuy;
 
     private void Start()
     {
+        StateMachine.Initialize(IdleState);
         GameManager.Instance.npcCustomerList.Add(this);
     }
 
-    public void SetCustomer(SO_Item _SOItem)
+    public void SetCustomer(SO_Item _wantToBuy)
     {
-        wantedSOItem = _SOItem;
+        wantToBuy = _wantToBuy;
         targetShop = GameManager.Instance.GetShopForCustomer(this);
-        MoveTo(targetShop.ReturnQueSlot(this).transform);
-        state = NPCState.GoingForQue;
+        NPC_State_MoveToShopQue moveToShopQue = new NPC_State_MoveToShopQue(this, StateMachine, targetShop.ReturnQueSlot(this).transform);
+        StateMachine.ChangeState(moveToShopQue);
+        //MoveTo(targetShop.ReturnQueSlot(this).transform);
+        //state = NPCState.GoingForQue;
     }
 
     private void NPCAI_Customer()
@@ -28,32 +31,52 @@ public class NPC_Customer : NPC
             case NPCState.Idle:
                 break;
             case NPCState.Walking:
+                if (!isPickDropAnimPlaying)
+                {
+                    Destroy(this.gameObject);
+                }
                 break;
             case NPCState.PickedUpWalking:
                 break;
             case NPCState.GoingForQue:
-                if (agent.remainingDistance < 0.1f)
+                if (agent.remainingDistance < 0.1f && !agent.pathPending)
                 {
                     state = NPCState.Queued;
+                    Debug.Log("Que again");
                 }
                 break;
             case NPCState.Queued:
-                if (targetShop.GetComponentInParent<Shop>().ReturnPreviousQueSlot(this) == null)
+                //if npc is on 1st place in que
+                if (targetShop.WhichPlaceAtQue(this) == 0)
                 {
-                    transform.DOLookAt(targetShop.GetComponentInParent<Shop>().transform.position, 0.5f, AxisConstraint.Y, Vector3.up)
+                    transform.DOLookAt(targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
                     .OnComplete(() =>
                     {
+                        Debug.Log("1. sýra" + this);
                         state = NPCState.WaitingForWorker;
                     });
+                    state = NPCState.PlayingAnim;
                 }
+                //if npc is not on 1st place in que
                 else
                 {
-                    transform.DOLookAt(targetShop.GetComponentInParent<Shop>().ReturnPreviousQueSlot(this).transform.position, 0.5f, AxisConstraint.Y, Vector3.up)
+                    transform.DOLookAt(targetShop.ReturnPreviousQueSlot(this).transform.position, 0.5f, AxisConstraint.Y, Vector3.up)
                     .OnComplete(() => 
                     {
-                        state = NPCState.WaitingForWorker;
+                        Debug.Log("2. sýra" + this);
+                        state = NPCState.WaitingForQue;
                     });
+                    state = NPCState.PlayingAnim;
                 }
+                break;
+            case NPCState.WaitingForQue:
+                MoveTo(targetShop.ReturnQueSlot(this).transform);
+                if (targetShop.WhichPlaceAtQue(this) == 0)
+                {
+
+                    state = NPCState.Queued;
+                }
+
                 
                 break;
             case NPCState.WaitingForWorker:
@@ -62,8 +85,11 @@ public class NPC_Customer : NPC
                     PickItem();
                     Item _item = targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item;
                     _item.PickUp(handPos);
+                    targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = true;
+                    targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item = null;
                     itemInHand = _item;
-                    state = NPCState.Idle;
+                    targetShop.GetComponentInChildren<CustomerQueue>().RemoveCustomerFromQue(this);
+                    state = NPCState.Walking;
                 }
                 break;
             default:
@@ -71,10 +97,11 @@ public class NPC_Customer : NPC
         }
     }
 
-
+ 
     private void Update()
     {
-        NPCAI_Customer();
+        StateMachine.CurrentNPCState.FrameUpdate();
+        //NPCAI_Customer();
 
         if (agent.enabled && !agent.hasPath && !agent.pathPending && agent.remainingDistance == 0 && (animator.GetBool("Walking") || animator.GetBool("CarryWalk")))
         {

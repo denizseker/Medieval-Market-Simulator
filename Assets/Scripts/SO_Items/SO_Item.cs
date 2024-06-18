@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 [CreateAssetMenu(menuName ="ScriptableObject/Item")]
 public class SO_Item : ScriptableObject
 {
@@ -12,6 +13,7 @@ public class SO_Item : ScriptableObject
     public string _itemDesc;
     public int _itemMaxStackCount;
     public bool _isItemStackable;
+    public Sprite _itemSprite;
 
     public GameObject _itemPrefab;
 }

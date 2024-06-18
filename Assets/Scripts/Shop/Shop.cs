@@ -17,7 +17,7 @@ public class Shop : MonoBehaviour
     protected ShopType shopType;
     public List<Item> itemList = new List<Item>();
     [SerializeField] protected List<Rack> rackList = new List<Rack>();
-    protected CustomerQueue customerQue;
+    public CustomerQueue customerQue;
     public Transform workerSalePos;
     public Transform stallSlotPos;
 
@@ -58,7 +58,6 @@ public class Shop : MonoBehaviour
         //cant find that spesific item in any rack at this shop.
         return null;
     }
-
     public void RemoveItemFromList(Item _item)
     {
         for (int i = 0; i < itemList.Count; i++)
@@ -82,31 +81,33 @@ public class Shop : MonoBehaviour
         }
         return null;
     }
-
+    public int WhichPlaceAtQue(NPC _npc)
+    {
+        for (int i = 0; i < customerQue.queSlotList.Count; i++)
+        {
+            if (customerQue.queSlotList[i].npc == _npc)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
     public CustomerQueueSlot ReturnPreviousQueSlot(NPC _npc)
     {
         for (int i = 0; i < customerQue.queSlotList.Count; i++)
         {
             if (customerQue.queSlotList[i].npc == _npc)
             {
-                if (i == 0) return null;
+                if (i == 0) return customerQue.queSlotList[0];
                 return customerQue.queSlotList[i-1];
             }
         }
         return null;
     }
-
-
     // Start is called before the first frame update
     void Start()
     {
         GameManager.Instance.shopList.Add(this);
-        customerQue = GetComponentInChildren<CustomerQueue>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

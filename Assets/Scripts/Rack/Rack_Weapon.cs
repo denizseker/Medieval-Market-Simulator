@@ -26,6 +26,7 @@ public class Rack_Weapon : Rack
                     .OnComplete(() => {
 
                         //setting boolean when anim completed
+                        _item.isItemInRack = true;
                         _item.isAnimCompleted = true;
                         _item.transform.parent.GetComponent<Slot>()._item = _item;
                         _item.transform.parent.GetComponent<Slot>()._isEmpty = false;
