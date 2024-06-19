@@ -39,7 +39,21 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     //Playercontroller calling this function when pressed E
     public void Interact(Transform _player)
     {
-        PickUp(_player.GetComponent<PlayerController>()._handPos);
+        if (isAnimCompleted)
+        {
+            if(_player.GetComponent<PlayerController>()._itemInHand == null)
+            {
+                _player.GetComponent<PlayerController>()._itemInHand = this;
+                PickUp(_player.GetComponent<PlayerController>()._handPos);
+            }
+            else
+            {
+                Debug.Log("El dolu");
+            }
+            
+            
+        }
+
     }
 
     public void PickUp(Transform _handPos)

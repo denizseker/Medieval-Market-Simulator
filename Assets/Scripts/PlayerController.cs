@@ -100,42 +100,25 @@ public class PlayerController : MonoBehaviour
                 //target is interactable
                 if (_object.TryGetComponent(typeof(IInteractable), out Component component))
                 {
-                    //hand is empty
+                    //hand is empty, interact with object.
                     if (_itemInHand == null)
                     {
-                        //hand empty and trying to interact with rack. Do nothing return.
-                        if(_object.GetComponent<Rack>() != null)
-                        {
-                            return;
-                        }
-                        //if item pickup anim completed otherwise not pickup again/another
-                        if (_object.GetComponent<Item>().isAnimCompleted)
-                        {
-                            _itemInHand = _object.GetComponent<Item>();
-                            _itemInHand.Interact(transform);
-                        }
+                        Debug.Log("Item yok");
+                        _object.GetComponent<IInteractable>().Interact(transform);
                     }
                     //hand is not empty
                     else
                     {
                         //hand not empty and interacted with rack
-                        if(_object.GetComponent<Rack>() != null)
+                        if(_object.GetComponent<Rack>() != null) 
                         {
-                            if (_itemInHand.isAnimCompleted)
-                            {
-                                _object.GetComponent<IInteractable>().Interact(transform);
-                            }
-                            
+                            _object.GetComponent<IInteractable>().Interact(transform);
                         }
                         //hand not empty and interacted with another item
                         if(_object.GetComponent<Item>() != null)
                         {
-                            if (_itemInHand.isAnimCompleted)
-                            {
-                                DropItem();
-                                _itemInHand = _object.GetComponent<Item>();
-                                _itemInHand.Interact(transform);
-                            }
+                            DropItem();
+                            _object.GetComponent<IInteractable>().Interact(transform);
                         }
                     }
                 }

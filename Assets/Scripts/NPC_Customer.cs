@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class NPC_Customer : NPC
+public class NPC_Customer : NPC , IInteractable
 {
 
     [HideInInspector] public SO_Item wantToBuy;
@@ -129,5 +129,10 @@ public class NPC_Customer : NPC
             ChatBubble.Create(transform,"I want to buy this one and some more word for check. Bla bla bla bla bla bla.");
         }
 
+    }
+
+    public void Interact(Transform _playerTransform)
+    {
+        Debug.Log("Selam");
     }
 }
