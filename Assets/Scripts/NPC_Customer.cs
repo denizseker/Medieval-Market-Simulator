@@ -101,7 +101,6 @@ public class NPC_Customer : NPC
     private void Update()
     {
         StateMachine.CurrentNPCState.FrameUpdate();
-        //NPCAI_Customer();
 
         if (agent.enabled && !agent.hasPath && !agent.pathPending && agent.remainingDistance == 0 && (animator.GetBool("Walking") || animator.GetBool("CarryWalk")))
         {
@@ -122,6 +121,12 @@ public class NPC_Customer : NPC
         if (Input.GetKeyDown(KeyCode.K))
         {
             DropItem();
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            ChatBubble.Create(transform,"I want to buy this one and some more word for check. Bla bla bla bla bla bla.");
         }
 
     }

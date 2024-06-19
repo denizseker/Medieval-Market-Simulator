@@ -10,8 +10,9 @@ public class LookAtCamera : MonoBehaviour
         _camera = FindObjectOfType<Camera>();
     }
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         transform.LookAt(transform.position + _camera.transform.rotation * Vector3.forward, _camera.transform.rotation * Vector3.up);
+
     }
 }

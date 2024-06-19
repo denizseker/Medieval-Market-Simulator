@@ -119,7 +119,6 @@ public class NPC_Worker : NPC
     private void Update()
     {
         StateMachine.CurrentNPCState.FrameUpdate();
-        //NPCAI_Worker();
 
         if (agent.enabled && !agent.hasPath && !agent.pathPending && agent.remainingDistance == 0 && (animator.GetBool("Walking") || animator.GetBool("CarryWalk")))
         {
