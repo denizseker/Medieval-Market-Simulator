@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
             //hand is empty now
             _itemInHand = null;
         }
-        
+
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -103,7 +103,6 @@ public class PlayerController : MonoBehaviour
                     //hand is empty, interact with object.
                     if (_itemInHand == null)
                     {
-                        Debug.Log("Item yok");
                         _object.GetComponent<IInteractable>().Interact(transform);
                     }
                     //hand is not empty
@@ -117,8 +116,12 @@ public class PlayerController : MonoBehaviour
                         //hand not empty and interacted with another item
                         if(_object.GetComponent<Item>() != null)
                         {
-                            DropItem();
-                            _object.GetComponent<IInteractable>().Interact(transform);
+                            if (_itemInHand.isAnimCompleted)
+                            {
+                                DropItem();
+                                _object.GetComponent<IInteractable>().Interact(transform);
+                            }
+                            
                         }
                     }
                 }
@@ -132,10 +135,6 @@ public class PlayerController : MonoBehaviour
             {
                 DropItem();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Instantiate(deneme._itemPrefab, transform.position, Quaternion.identity);
         }
     }
 

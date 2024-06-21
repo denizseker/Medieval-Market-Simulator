@@ -39,21 +39,8 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     //Playercontroller calling this function when pressed E
     public void Interact(Transform _player)
     {
-        if (isAnimCompleted)
-        {
-            if(_player.GetComponent<PlayerController>()._itemInHand == null)
-            {
-                _player.GetComponent<PlayerController>()._itemInHand = this;
-                PickUp(_player.GetComponent<PlayerController>()._handPos);
-            }
-            else
-            {
-                Debug.Log("El dolu");
-            }
-            
-            
-        }
-
+        _player.GetComponent<PlayerController>()._itemInHand = this;
+        PickUp(_player.GetComponent<PlayerController>()._handPos);
     }
 
     public void PickUp(Transform _handPos)
@@ -75,17 +62,29 @@ public class Item : MonoBehaviour , IPickable , IInteractable
         //Animation gonna start so setting the bool
         isAnimCompleted = false;
         //Creating move and rotate sequence for pickup anim
+        //Sequence mySequence = DOTween.Sequence();
+        //mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.6f))
+        //    .Join(transform.DOLocalRotate(new Vector3(-35, 0, 90),0.2f))
+        //    .Insert(0.3f,transform.DOLocalRotate(new Vector3(-35, 0, 90), 0.3f,RotateMode.FastBeyond360).SetEase(Ease.OutBack))
+        //    .OnComplete(() => {
+
+        //        //setting boolean when anim completed
+        //        isAnimCompleted = true;
+        //        mySequence.Kill();
+        //    });
+
         Sequence mySequence = DOTween.Sequence();
-        mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.6f))
-            .Join(transform.DOLocalRotate(new Vector3(-35, 0, 90),0.2f))
-            .Insert(0.3f,transform.DOLocalRotate(new Vector3(-35, 0, 90), 0.3f,RotateMode.FastBeyond360).SetEase(Ease.OutBack))
+        mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.5f))
+            .Join(transform.DOLocalRotate(new Vector3(-35, 0, 90), 0.5f))
             .OnComplete(() => {
 
                 //setting boolean when anim completed
                 isAnimCompleted = true;
                 mySequence.Kill();
             });
+
         //Destroying rigidbody for unwanted movements
         Destroy(GetComponent<Rigidbody>());
     }
+
 }

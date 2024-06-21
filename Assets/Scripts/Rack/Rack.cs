@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public abstract class Rack : MonoBehaviour , IInteractable , IPickable
+public abstract class Rack : MonoBehaviour , IInteractable
 {
     public List<Slot> slotList = new List<Slot>();
     public bool isRackFull;
 
     public abstract void PlaceItemToRack(Transform _player);
-   
-    public void PickUp(Transform _handPos)
-    {
-        
-    }
+
     public Slot GetSlot()
     {
         for (int i = 0; i < slotList.Count; i++)
@@ -37,4 +33,6 @@ public abstract class Rack : MonoBehaviour , IInteractable , IPickable
             PlaceItemToRack(_player);
         }
     }
+
+    
 }
