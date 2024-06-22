@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviour
 
     public Transform chatBubble;
 
+    public void Deneme()
+    {
+        
+    }
+
+
     public Shop GetShopForCustomer(NPC_Customer _npc)
     {
         for (int i = 0; i < shopList.Count; i++)
@@ -48,9 +54,9 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            SetCustomerToShop();
-        }
+        //if (Input.GetKeyDown(KeyCode.O))
+        //{
+        //    SetCustomerToShop();
+        //}
     }
 }

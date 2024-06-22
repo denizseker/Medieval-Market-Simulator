@@ -114,21 +114,6 @@ public class NPC_Customer : NPC , IInteractable
                 animator.SetBool("Walking", false);
             }
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            PickItem();
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            DropItem();
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            ChatBubble.Create(transform,"I want to buy this one and some more word for check. Bla bla bla bla bla bla.");
-        }
-
     }
 
     public void Interact(Transform _playerTransform)

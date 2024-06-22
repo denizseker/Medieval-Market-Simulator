@@ -20,10 +20,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _interactable;
 
     public Item _itemInHand;
-
     private Rigidbody _rbPlayer;
     private Vector2 _moveInput;
     private Vector3 move;
+
+    private InputActionMap playerMap;
+    private InputActionMap uiMap;
 
     private void Awake()
     {
@@ -37,15 +39,34 @@ public class PlayerController : MonoBehaviour
         }
 
         Application.targetFrameRate = 360;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        var actions = GetComponent<PlayerInput>().actions;
+        playerMap = actions.FindActionMap("Player");
+        uiMap = actions.FindActionMap("UI");
         _rbPlayer = GetComponent<Rigidbody>();
+        DeactivateUIMode();
     }
+
+    public void ActivateUIMode()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        playerMap.Disable();
+        uiMap.Enable();
+    }
+    public void DeactivateUIMode()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        playerMap.Enable();
+        uiMap.Disable();
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -81,61 +102,95 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    public void DebugIt()
+    {
+        if(Cursor.lockState == CursorLockMode.None)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
     }
 
-
-    private void Update()
+    public void Interact()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        float interactDistance = 7.1f;
+
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit raycastHit, interactDistance, _interactable))
         {
-            float interactDistance = 7.1f;
+            Transform _object = raycastHit.transform;
 
-            if(Physics.Raycast(_cameraTransform.position, _cameraTransform.forward,out RaycastHit raycastHit, interactDistance, _interactable))
+            //target is interactable
+            if (_object.TryGetComponent(typeof(IInteractable), out Component component))
             {
-                Transform _object = raycastHit.transform;
-
-                //target is interactable
-                if (_object.TryGetComponent(typeof(IInteractable), out Component component))
+                //hand is empty, interact with object.
+                if (_itemInHand == null)
                 {
-                    //hand is empty, interact with object.
-                    if (_itemInHand == null)
+                    _object.GetComponent<IInteractable>().Interact(transform);
+                }
+                //hand is not empty
+                else
+                {
+                    //hand not empty and interacted with rack
+                    if (_object.GetComponent<Rack>() != null)
                     {
                         _object.GetComponent<IInteractable>().Interact(transform);
                     }
-                    //hand is not empty
-                    else
+                    //hand not empty and interacted with another item
+                    if (_object.GetComponent<Item>() != null)
                     {
-                        //hand not empty and interacted with rack
-                        if(_object.GetComponent<Rack>() != null) 
+                        if (_itemInHand.isAnimCompleted)
                         {
+                            DropItem();
                             _object.GetComponent<IInteractable>().Interact(transform);
                         }
-                        //hand not empty and interacted with another item
-                        if(_object.GetComponent<Item>() != null)
-                        {
-                            if (_itemInHand.isAnimCompleted)
-                            {
-                                DropItem();
-                                _object.GetComponent<IInteractable>().Interact(transform);
-                            }
-                            
-                        }
+                    }
+                    if (_object.GetComponent<Label>() != null)
+                    {
+                        _object.GetComponent<IInteractable>().Interact(transform);
                     }
                 }
             }
         }
-        //Drop item in hand on the ground
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //checking if there is item in hand
-            if(_itemInHand != null)
-            {
-                DropItem();
-            }
-        }
+    }
+
+
+    private void Update()
+    {
+        ////Drop item in hand on the ground
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    //checking if there is item in hand
+        //    if(_itemInHand != null)
+        //    {
+        //        DropItem();
+        //    }
+        //}
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    Cursor.lockState = CursorLockMode.Confined;
+        //    Cursor.visible = false;
+        //}
+        //if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        //{
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = true;
+        //}
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    PauseInput();
+        //}
     }
 
 }

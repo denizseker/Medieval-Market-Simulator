@@ -10,10 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
 
-public class Outline : MonoBehaviour {
+public class Outline : MonoBehaviour ,IPointerEnterHandler , IPointerExitHandler
+{
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
   public enum Mode {
@@ -134,28 +136,9 @@ public class Outline : MonoBehaviour {
         }
     }
 
-    void OnMouseExit()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        HideOutline();
-        TooltipScreenSpaceUI.HideTooltip_Static();
-    }
 
-    void OnMouseEnter() 
-    {
-        float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-        if (distance <= 7f)
-        {
-            if(TryGetComponent(out Item component))
-            {
-                Item _item = GetComponent<Item>();
-                TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
-            }
-            
-            ShowOutline();
-        }
-    }
-    private void OnMouseOver()
-    {
         float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
         if (distance <= 7f)
         {
@@ -166,10 +149,30 @@ public class Outline : MonoBehaviour {
             }
             ShowOutline();
         }
-        else
-        {
-            HideOutline();
-        }
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        HideOutline();
+        TooltipScreenSpaceUI.HideTooltip_Static();
+    }
+
+    private void OnMouseOver()
+    {
+        //float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
+        //if (distance <= 7f)
+        //{
+        //    if (TryGetComponent(out Item component))
+        //    {
+        //        Item _item = GetComponent<Item>();
+        //        TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
+        //    }
+        //    ShowOutline();
+        //}
+        //else
+        //{
+        //    HideOutline();
+        //    TooltipScreenSpaceUI.HideTooltip_Static();
+        //}
     }
 
     void OnValidate() {
@@ -354,4 +357,6 @@ public class Outline : MonoBehaviour {
         break;
     }
   }
+
+    
 }
