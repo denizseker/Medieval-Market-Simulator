@@ -638,7 +638,7 @@ PrefabInstance:
     - target: {fileID: 3823054736974868235, guid: 9e459d065f931ba42897ca766931ba98,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -18.965
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 3823054737132735176, guid: 9e459d065f931ba42897ca766931ba98,
         type: 3}
@@ -893,7 +893,7 @@ PrefabInstance:
     - target: {fileID: 3823054737977669135, guid: 9e459d065f931ba42897ca766931ba98,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -18.965
+      value: -5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3235,6 +3235,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _itemInHand: {fileID: 0}
+  _rbPlayer: {fileID: 0}
 --- !u!54 &797369913
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3354,10 +3355,10 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 797369912}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Interact
-        m_Mode: 1
+      - m_Target: {fileID: 797369915}
+        m_TargetAssemblyTypeName: InteractHandler, Assembly-CSharp
+        m_MethodName: InteractKeyPressed
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3384,6 +3385,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c8ca7ff9-4eb5-4a71-9908-234402e514d2
     m_ActionName: Player/Debug[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 797369915}
+        m_TargetAssemblyTypeName: InteractHandler, Assembly-CSharp
+        m_MethodName: DropItemKeyPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7b14fa45-2830-44a0-815f-3f626b9e1608
+    m_ActionName: Player/DropItem[/Keyboard/g]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -3405,6 +3422,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   cameraTransform: {fileID: 1809844528}
+  interactDistance: 6
 --- !u!1 &798260764
 GameObject:
   m_ObjectHideFlags: 0
