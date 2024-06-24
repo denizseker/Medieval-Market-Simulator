@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
 
-public class Outline : MonoBehaviour ,IPointerEnterHandler , IPointerExitHandler
+public class Outline : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
@@ -82,7 +82,7 @@ public class Outline : MonoBehaviour ,IPointerEnterHandler , IPointerExitHandler
 
   private bool needsUpdate;
 
-  private bool additionalMaterialApplied;
+  public bool additionalMaterialApplied;
 
     void Awake() {
     // Cache renderers
@@ -120,9 +120,14 @@ public class Outline : MonoBehaviour ,IPointerEnterHandler , IPointerExitHandler
             renderer.materials = materials.ToArray();
             additionalMaterialApplied = true;
         }
+        
     }
     public void HideOutline()
     {
+        if (!additionalMaterialApplied)
+        {
+            return;
+        }
         foreach (var renderer in renderers)
         {
             // Remove outline shaders
@@ -134,27 +139,28 @@ public class Outline : MonoBehaviour ,IPointerEnterHandler , IPointerExitHandler
             renderer.materials = materials.ToArray();
             additionalMaterialApplied = false;
         }
+        
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
-        float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-        if (distance <= 7f)
-        {
-            if (TryGetComponent(out Item component))
-            {
-                Item _item = GetComponent<Item>();
-                TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
-            }
-            ShowOutline();
-        }
+        //float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
+        //if(distance < 7f)
+        //{
+        //    Item _item = GetComponent<Item>();
+        //    ShowOutline();
+        //    TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
+        //}
+        
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideOutline();
-        TooltipScreenSpaceUI.HideTooltip_Static();
+        //HideOutline();
+        //TooltipScreenSpaceUI.HideTooltip_Static();
     }
+
+
 
     private void OnMouseOver()
     {

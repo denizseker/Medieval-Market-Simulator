@@ -2563,6 +2563,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!65 &608081970
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3116,6 +3117,7 @@ GameObject:
   - component: {fileID: 797369913}
   - component: {fileID: 797369914}
   - component: {fileID: 797369912}
+  - component: {fileID: 797369915}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -3387,6 +3389,22 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &797369915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797369907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9527081e801d98144935e4cd63b3dfe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  cameraTransform: {fileID: 1809844528}
 --- !u!1 &798260764
 GameObject:
   m_ObjectHideFlags: 0
@@ -4712,6 +4730,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!136 &1307839377
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6286,7 +6305,7 @@ GameObject:
   - component: {fileID: 1809844529}
   m_Layer: 6
   m_Name: MainCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8725,6 +8744,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!64 &33018420023806542
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11390,6 +11410,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!33 &3034240389062738466
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12774,6 +12795,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!4 &5078402984982055856
 Transform:
   m_ObjectHideFlags: 0
@@ -14799,6 +14821,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  additionalMaterialApplied: 0
 --- !u!4 &8898548185459911657
 Transform:
   m_ObjectHideFlags: 0
