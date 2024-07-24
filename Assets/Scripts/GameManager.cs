@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class GameManager : MonoBehaviour
     public List<NPC_Customer> npcCustomerList = new List<NPC_Customer>();
 
     public Transform chatBubble;
+    public Transform deSpawnTransform;
 
-    public void Deneme()
+
+    public void Deneme(InputAction.CallbackContext context)
     {
+        if (context.started)
+        {
+            SetCustomerToShop();
+        }
         
     }
 
@@ -52,11 +59,10 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
+
+
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.O))
-        //{
-        //    SetCustomerToShop();
-        //}
+        
     }
 }

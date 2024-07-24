@@ -75,20 +75,25 @@ public class PlayerController : MonoBehaviour
         move.y = 0f;
         _rbPlayer.AddForce(move.normalized * _speed, ForceMode.VelocityChange);
     }
-
-
-    public void DebugIt()
+    public void DebugIt(InputAction.CallbackContext context)
     {
-        if(Cursor.lockState == CursorLockMode.None)
+        //if(Cursor.lockState == CursorLockMode.None)
+        //{
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = true;
+        //}
+        //else
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //    Cursor.visible = true;
+        //}
+
+        if (context.started) //KEY PRESSED
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = true;
+            
         }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+
+        
         
     }
 

@@ -33,6 +33,7 @@ public class NPC : MonoBehaviour
     public NPC_State_HandleCustomer HandleCustomerState;
     public NPC_State_ReturnFromRackWithItem ReturnFromRackWithItemState;
     public NPC_State_GiveItemToCustomer GiveItemToCustomerState;
+    public NPC_State_GoToDespawn GoToDespawnState;
     private void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
     {
         //fill
@@ -65,6 +66,7 @@ public class NPC : MonoBehaviour
         HandleCustomerState = new NPC_State_HandleCustomer(this, StateMachine);
         ReturnFromRackWithItemState = new NPC_State_ReturnFromRackWithItem(this, StateMachine);
         GiveItemToCustomerState = new NPC_State_GiveItemToCustomer(this, StateMachine);
+        GoToDespawnState = new NPC_State_GoToDespawn(this, StateMachine);
 
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
@@ -118,4 +120,5 @@ public class NPC : MonoBehaviour
             animator.SetBool("Walking", true);
         }
     }
+
 }

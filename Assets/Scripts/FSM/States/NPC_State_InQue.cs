@@ -52,6 +52,7 @@ public class NPC_State_InQue : NPCState
         else
         {
             npc.MoveTo(npc.targetShop.ReturnQueSlot(npc).transform);
+            Debug.Log(npc.targetShop.WhichPlaceAtQue(npc));
         }
     }
 }

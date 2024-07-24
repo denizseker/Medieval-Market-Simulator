@@ -69,7 +69,6 @@ public class InteractHandler : MonoBehaviour
                     //hand is empty, interact with object.
                     if (playerController._itemInHand == null)
                     {
-                        Debug.Log("?");
                         highlight.GetComponent<IInteractable>().Interact(transform);
                     }
                     //hand is not empty
@@ -105,7 +104,6 @@ public class InteractHandler : MonoBehaviour
         // Highlight
         if (highlight != null)
         {
-            
             if(highlight.gameObject.GetComponent<Outline>() != null)
             {
                 highlight.gameObject.GetComponent<Outline>().enabled = false;
