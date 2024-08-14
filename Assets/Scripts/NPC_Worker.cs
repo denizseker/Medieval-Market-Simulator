@@ -7,12 +7,14 @@ public class NPC_Worker : NPC
 {
     [HideInInspector] public CustomerQueue customerQue;
     [HideInInspector] public NPC_Customer currentCustomer;
+    [HideInInspector] public NPC_Customer previousCustomer;
     private void Start()
     {
         StateMachine.Initialize(WaitForCustomerState);
         state = NPCState.WaitingForCustomer;
         customerQue = targetShop.GetComponentInChildren<CustomerQueue>();
         currentCustomer = null;
+        previousCustomer = null;
     }
     private void NPCAI_Worker()
     {

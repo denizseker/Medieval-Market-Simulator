@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CustomerQueue : MonoBehaviour
 {
     public List<CustomerQueueSlot> queSlotList = new List<CustomerQueueSlot>();
     public bool _isQueueFull;
+
+
+    public UnityEvent deneme;
 
 
     public CustomerQueueSlot AddCustomerToQueue(NPC_Customer _npc)
@@ -33,6 +37,7 @@ public class CustomerQueue : MonoBehaviour
                     queSlotList[i]._isSlotEmpty = true;
                     queSlotList[i].npc = null;
                     ReOrderQue(i);
+                    deneme.Invoke();
                 }
             }
         }

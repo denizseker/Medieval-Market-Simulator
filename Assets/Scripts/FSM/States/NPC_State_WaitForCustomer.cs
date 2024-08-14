@@ -34,8 +34,15 @@ public class NPC_State_WaitForCustomer : NPCState
         {
             if (worker.customerQue.queSlotList[0].npc.StateMachine.CurrentNPCState == worker.customerQue.queSlotList[0].npc.WaitForWorkerState)
             {
-                worker.currentCustomer = worker.targetShop.customerQue.queSlotList[0].npc;
-                npcStateMachine.ChangeState(npc.HandleCustomerState);
+                if(worker.targetShop.customerQue.queSlotList[0].npc != worker.previousCustomer)
+                {
+                    worker.currentCustomer = worker.targetShop.customerQue.queSlotList[0].npc;
+                    npcStateMachine.ChangeState(npc.HandleCustomerState);
+                }
+                else
+                {
+                    Debug.Log("Yeni customer bekliyor");
+                } 
             }
         }
     }

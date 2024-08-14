@@ -79,6 +79,7 @@ public class Shop : MonoBehaviour
                 return customerQue.queSlotList[i];
             }
         }
+        Debug.Log("null");
         return null;
     }
     public int WhichPlaceAtQue(NPC _npc)

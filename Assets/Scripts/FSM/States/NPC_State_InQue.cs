@@ -20,19 +20,15 @@ public class NPC_State_InQue : NPCState
     {
         base.EnterState();
         customer = npc.GetComponent<NPC_Customer>();
+        npc.targetShop.customerQue.deneme.AddListener(CheckQue);
         if (npc.targetShop.WhichPlaceAtQue(npc) == 0)
         {
-            ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "Þu aletten 1 tane getir hele.");
-            npc.transform.DOLookAt(npc.targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
-            .OnComplete(() =>
-            {
-                npcStateMachine.ChangeState(npc.WaitForWorkerState);
-            });
+            AskForItem();
         }
         //if npc is not on 1st place in que
         else
         {
-            npc.transform.DOLookAt(npc.targetShop.ReturnPreviousQueSlot(npc).transform.position, 0.5f, AxisConstraint.Y, Vector3.up);
+            WaitForQue();
         }
 
     }
@@ -40,19 +36,33 @@ public class NPC_State_InQue : NPCState
     public override void ExitState()
     {
         base.ExitState();
+        npc.targetShop.customerQue.deneme.RemoveListener(CheckQue);
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        if (npc.targetShop.WhichPlaceAtQue(npc) == 0)
+    }
+
+    private void CheckQue()
+    {
+        NPC_State_MoveToShopQue moveToShopQue = new NPC_State_MoveToShopQue(npc, npc.StateMachine, npc.targetShop.ReturnQueSlot(npc).transform);
+        npc.StateMachine.ChangeState(moveToShopQue);
+        //npc.MoveTo(npc.targetShop.ReturnQueSlot(npc).transform);
+    }
+
+    private void AskForItem()
+    {
+        ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.");
+        npc.transform.DOLookAt(npc.targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
+        .OnComplete(() =>
         {
-            //npcStateMachine.ChangeState(new NPC_State_WaitForWorker(npc,npcStateMachine));
-        }
-        else
-        {
-            npc.MoveTo(npc.targetShop.ReturnQueSlot(npc).transform);
-            Debug.Log(npc.targetShop.WhichPlaceAtQue(npc));
-        }
+            npcStateMachine.ChangeState(npc.WaitForWorkerState);
+        });
+    }
+
+    private void WaitForQue()
+    {
+        npc.transform.DOLookAt(npc.targetShop.ReturnPreviousQueSlot(npc).transform.position, 0.5f, AxisConstraint.Y, Vector3.up);
     }
 }

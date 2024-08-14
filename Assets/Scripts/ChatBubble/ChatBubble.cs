@@ -15,7 +15,7 @@ public class ChatBubble : MonoBehaviour
         //offset for bubble on character
         chatBubbleTransform.localPosition = new Vector3(0,2,0);
         chatBubbleTransform.GetComponent<ChatBubble>().Setup(item, text,chatBubbleTransform);
-        Destroy(chatBubbleTransform.gameObject, 5f);
+        Destroy(chatBubbleTransform.gameObject, 3f);
         return chatBubbleTransform.GetComponent<ChatBubble>();
     }
     //Without item display
@@ -25,7 +25,7 @@ public class ChatBubble : MonoBehaviour
         //offset for bubble on character
         chatBubbleTransform.localPosition = new Vector3(0, 2, 0);
         chatBubbleTransform.GetComponent<ChatBubble>().Setup(text, chatBubbleTransform);
-        Destroy(chatBubbleTransform.gameObject, 5f);
+        Destroy(chatBubbleTransform.gameObject, 3f);
         return chatBubbleTransform.GetComponent<ChatBubble>();
     }
 
@@ -87,7 +87,7 @@ public class ChatBubble : MonoBehaviour
 
 
         isTalking = true;
-        TextWriter.AddWriter_Static(textMeshPro, text, 0.05f, true, true, () => {
+        TextWriter.AddWriter_Static(textMeshPro, text, 0.02f, true, true, () => {
 
             isTalking = false;
 

@@ -24,7 +24,7 @@ public class NPC_State_HandleCustomer : NPCState
         {
             //Get the item from rack and give to customer.
             worker.MoveTo(worker.targetShop.ReturnItemPickUpPos(worker.currentCustomer.wantToBuy));
-            ChatBubble.Create(npc.transform,"Hay hay paþam.");
+            ChatBubble.Create(npc.transform, "This one’s a good pick. I’ll get it ready for you.");
         }
         else
         {

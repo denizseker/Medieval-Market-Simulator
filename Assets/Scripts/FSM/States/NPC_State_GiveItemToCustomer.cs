@@ -20,14 +20,15 @@ public class NPC_State_GiveItemToCustomer : NPCState
 
         worker = npc.GetComponent<NPC_Worker>();
         worker.PlaceItemToStall();
-
-        ChatBubble.Create(npc.transform, "Evir çevir götüne sok");
+        ChatBubble.Create(npc.transform, "Here you go.");
+        npcStateMachine.ChangeState(npc.WaitForCustomerState);
 
     }
 
     public override void ExitState()
     {
         base.ExitState();
+        worker.previousCustomer = worker.targetShop.customerQue.queSlotList[0].npc;
     }
 
     public override void FrameUpdate()

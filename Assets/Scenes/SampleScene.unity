@@ -3131,7 +3131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &616387144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3661,7 +3661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &731387526
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5348,7 +5348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &971372128
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8961,7 +8961,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1915818356
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12220,6 +12220,9 @@ MonoBehaviour:
   - {fileID: 6236472374211722779}
   - {fileID: 1666969294959393721}
   _isQueueFull: 0
+  deneme:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &685506569038634619
 Transform:
   m_ObjectHideFlags: 0
@@ -12603,6 +12606,7 @@ MonoBehaviour:
   _pickedSomething: 0
   customerQue: {fileID: 0}
   currentCustomer: {fileID: 0}
+  previousCustomer: {fileID: 0}
 --- !u!4 &1207290524708324362
 Transform:
   m_ObjectHideFlags: 0

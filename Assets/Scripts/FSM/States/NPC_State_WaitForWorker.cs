@@ -39,8 +39,7 @@ public class NPC_State_WaitForWorker : NPCState
             npc.targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item = null;
             npc.itemInHand = _item;
             npc.targetShop.GetComponentInChildren<CustomerQueue>().RemoveCustomerFromQue(npc.GetComponent<NPC_Customer>());
-
-            ChatBubble.Create(npc.transform, "CcC dILdAr iS HerE CcC");
+            ChatBubble.Create(npc.transform, "Exactly what I wanted.");
             npcStateMachine.ChangeState(npc.GoToDespawnState);
         }
     }
