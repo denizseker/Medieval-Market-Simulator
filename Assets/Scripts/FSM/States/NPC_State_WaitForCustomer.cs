@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPC_State_WaitForCustomer : NPCState
 {
-    NPC_Worker worker;
+    private NPC_Worker worker;
 
     public NPC_State_WaitForCustomer(NPC _npc, NPCStateMachine _npcStateMachine) : base(_npc, _npcStateMachine)
     {
@@ -30,19 +30,13 @@ public class NPC_State_WaitForCustomer : NPCState
     {
         base.FrameUpdate();
 
-        if (!worker.customerQue.queSlotList[0]._isSlotEmpty)
+        var firstSlot = worker.customerQue.queSlotList[0];
+        if (!firstSlot._isSlotEmpty && firstSlot.npc.StateMachine.CurrentNPCState == firstSlot.npc.WaitForWorkerState)
         {
-            if (worker.customerQue.queSlotList[0].npc.StateMachine.CurrentNPCState == worker.customerQue.queSlotList[0].npc.WaitForWorkerState)
+            if (firstSlot.npc != worker.previousCustomer)
             {
-                if(worker.targetShop.customerQue.queSlotList[0].npc != worker.previousCustomer)
-                {
-                    worker.currentCustomer = worker.targetShop.customerQue.queSlotList[0].npc;
-                    npcStateMachine.ChangeState(npc.HandleCustomerState);
-                }
-                else
-                {
-                    Debug.Log("Yeni customer bekliyor");
-                } 
+                worker.currentCustomer = firstSlot.npc;
+                npcStateMachine.ChangeState(npc.HandleCustomerState);
             }
         }
     }

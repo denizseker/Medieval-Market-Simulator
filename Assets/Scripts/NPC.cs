@@ -7,23 +7,6 @@ using TMPro;
 
 public class NPC : MonoBehaviour
 {
-    public enum NPCState
-    {
-        Idle,
-        Walking,
-        PickedUpWalking,
-        GoingForQue,
-        Queued,
-        WaitingForWorker,
-        WaitingForCustomer,
-        HandlingCustomer,
-        TakingItemFromRack,
-        ReturningFromRackWithItem,
-        GiveItemToCustomer,
-        WaitingForQue,
-        PlayingAnim,
-    }
-
     public NPCStateMachine StateMachine;
     public NPC_State_Idle IdleState;
     public NPC_State_InQue InQueState;
@@ -38,21 +21,19 @@ public class NPC : MonoBehaviour
     {
         //fill
     }
+
     public enum AnimationTriggerType
     {
         PickUp,
         Drop,
     }
     public TMP_Text stateText;
-    [HideInInspector] public NPCState state;
     [HideInInspector] public float range = 50.0f;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     public Shop targetShop;
     public Transform handPos;
     [HideInInspector] public Item itemInHand;
-    //Pick or drop animation boolean. Animator behaviour controlling this boolean if its playing or not.
-    [HideInInspector] public bool isPickDropAnimPlaying;
 
     [HideInInspector] public bool _pickedSomething;
     private void Awake()
@@ -91,7 +72,6 @@ public class NPC : MonoBehaviour
     //Calling when pickup anim start
     public void PickItem()
     {
-        isPickDropAnimPlaying = true;
         animator.Play("PickUp");
         _pickedSomething = true;
         agent.speed = 0.9f;
@@ -101,7 +81,6 @@ public class NPC : MonoBehaviour
     {
         if (_pickedSomething)
         {
-            isPickDropAnimPlaying = true;
             animator.Play("Drop");
             _pickedSomething = false;
             agent.speed = 1.5f;

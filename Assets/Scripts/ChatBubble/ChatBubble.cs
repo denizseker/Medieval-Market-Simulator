@@ -5,92 +5,112 @@ using UnityEngine;
 
 public class ChatBubble : MonoBehaviour
 {
-    private float offsetDef = 0.085f;
+    private const float OffsetDef = 0.085f;
+    private const float TextWriteSpeedWithItem = 0.03f;
+    private const float TextWriteSpeedWithoutItem = 0.02f;
+    private const float DestroyDelay = 2f;
+    private static readonly Vector3 BubbleOffset = new Vector3(0, 2, 0);
+
     public bool isTalking;
-
-    //With item display
-    public static ChatBubble Create(Transform parent,SO_Item item,string text)
-    {
-        Transform chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
-        //offset for bubble on character
-        chatBubbleTransform.localPosition = new Vector3(0,2,0);
-        chatBubbleTransform.GetComponent<ChatBubble>().Setup(item, text,chatBubbleTransform);
-        Destroy(chatBubbleTransform.gameObject, 3f);
-        return chatBubbleTransform.GetComponent<ChatBubble>();
-    }
-    //Without item display
-    public static ChatBubble Create(Transform parent, string text)
-    {
-        Transform chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
-        //offset for bubble on character
-        chatBubbleTransform.localPosition = new Vector3(0, 2, 0);
-        chatBubbleTransform.GetComponent<ChatBubble>().Setup(text, chatBubbleTransform);
-        Destroy(chatBubbleTransform.gameObject, 3f);
-        return chatBubbleTransform.GetComponent<ChatBubble>();
-    }
-
+    private System.Action onDestroyCallback;
 
     public SpriteRenderer backgroundSpriteRenderer;
     public SpriteRenderer iconSpriteRenderer;
     public TextMeshPro textMeshPro;
     public TextMeshPro fakeTextMeshPro;
 
-    //With item display
-    private void Setup(SO_Item _item, string text,Transform bubble)
+    // With item display
+    public static ChatBubble Create(Transform parent, SO_Item item, string text, System.Action onDestroyCallback = null)
     {
-        //Getting values from faketext so user cant see the full text in first frame.
-        fakeTextMeshPro.SetText(text);
-        fakeTextMeshPro.ForceMeshUpdate();
-        Vector2 textSize = fakeTextMeshPro.GetRenderedValues(false);
-        Vector2 padding = new Vector2((iconSpriteRenderer.size.x * iconSpriteRenderer.transform.localScale.x) + offsetDef, 0.1f);
+        var chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
+        chatBubbleTransform.localPosition = BubbleOffset;
+        var chatBubble = chatBubbleTransform.GetComponent<ChatBubble>();
+        chatBubble.Setup(item, text, onDestroyCallback);
+        return chatBubble;
+    }
+
+    // Without item display
+    public static ChatBubble Create(Transform parent, string text, System.Action onDestroyCallback = null)
+    {
+        var chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
+        chatBubbleTransform.localPosition = BubbleOffset;
+        var chatBubble = chatBubbleTransform.GetComponent<ChatBubble>();
+        chatBubble.Setup(text, onDestroyCallback);
+        return chatBubble;
+    }
+
+    // With item display
+    private void Setup(SO_Item item, string text, System.Action onDestroyCallback)
+    {
+        this.onDestroyCallback = onDestroyCallback;
+        SetupFakeText(text);
+        var textSize = fakeTextMeshPro.GetRenderedValues(false);
+        var padding = new Vector2((iconSpriteRenderer.size.x * iconSpriteRenderer.transform.localScale.x) + OffsetDef, 0.1f);
         backgroundSpriteRenderer.size = textSize + padding;
 
-        Vector3 offset = new Vector3(-iconSpriteRenderer.size.x / 2 * iconSpriteRenderer.transform.localScale.x, 0);
-        backgroundSpriteRenderer.transform.localPosition = new Vector3((backgroundSpriteRenderer.size.x - (iconSpriteRenderer.size.x * iconSpriteRenderer.transform.localScale.x) - (offsetDef / 2)) / 2f, 0f) + offset;
+        var offset = new Vector3(-iconSpriteRenderer.size.x / 2 * iconSpriteRenderer.transform.localScale.x, 0);
+        backgroundSpriteRenderer.transform.localPosition = new Vector3((backgroundSpriteRenderer.size.x - (iconSpriteRenderer.size.x * iconSpriteRenderer.transform.localScale.x) - (OffsetDef / 2)) / 2f, 0f) + offset;
 
-        //Adjusting bubble position to middle of the character
-        bubble.localPosition = new Vector3(-backgroundSpriteRenderer.transform.localPosition.x, bubble.localPosition.y, bubble.localPosition.z);
-        iconSpriteRenderer.sprite = _item._itemSprite;
-        //Setting chid objects parent to bacground. LookatCamera script rotating background
-        iconSpriteRenderer.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
-        textMeshPro.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
-        fakeTextMeshPro.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
+        AdjustBubblePosition();
+
+        iconSpriteRenderer.sprite = item._itemSprite;
+        SetChildObjectsParent();
 
         isTalking = true;
-        TextWriter.AddWriter_Static(textMeshPro, text, 0.03f, true, true, () => {
-
+        TextWriter.AddWriter_Static(textMeshPro, text, TextWriteSpeedWithItem, true, true, () =>
+        {
             isTalking = false;
+            StartCoroutine(DestroyAfterDelay());
         });
     }
-    //Without item display
-    private void Setup(string text,Transform bubble)
+
+    // Without item display
+    private void Setup(string text, System.Action onDestroyCallback)
     {
-        //Getting values from faketext so user cant see the full text in first frame.
-        fakeTextMeshPro.SetText(text);
-        fakeTextMeshPro.ForceMeshUpdate();
-        Vector2 textSize = fakeTextMeshPro.GetRenderedValues(false);
-        Vector2 padding = new Vector2(offsetDef, 0.1f);
+        this.onDestroyCallback = onDestroyCallback;
+        SetupFakeText(text);
+        var textSize = fakeTextMeshPro.GetRenderedValues(false);
+        var padding = new Vector2(OffsetDef, 0.1f);
         backgroundSpriteRenderer.size = textSize + padding;
 
-        Vector3 offset = new Vector3(-offsetDef, 0);
+        var offset = new Vector3(-OffsetDef, 0);
         backgroundSpriteRenderer.transform.localPosition = new Vector3((backgroundSpriteRenderer.size.x / 2f) + 0.03f, 0f) + offset;
 
-        //Adjusting bubble position to middle of the character
-        bubble.localPosition = new Vector3(-backgroundSpriteRenderer.transform.localPosition.x, bubble.localPosition.y, bubble.localPosition.z);
+        AdjustBubblePosition();
 
-        //Setting chid objects parent to bacground. LookatCamera script rotating background
+        SetChildObjectsParent();
+        iconSpriteRenderer.gameObject.SetActive(false);
+
+        isTalking = true;
+        TextWriter.AddWriter_Static(textMeshPro, text, TextWriteSpeedWithoutItem, true, true, () =>
+        {
+            isTalking = false;
+            StartCoroutine(DestroyAfterDelay());
+        });
+    }
+
+    private void SetupFakeText(string text)
+    {
+        fakeTextMeshPro.SetText(text);
+        fakeTextMeshPro.ForceMeshUpdate();
+    }
+
+    private void AdjustBubblePosition()
+    {
+        transform.localPosition = new Vector3(-backgroundSpriteRenderer.transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
+    }
+
+    private void SetChildObjectsParent()
+    {
         iconSpriteRenderer.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
         textMeshPro.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
         fakeTextMeshPro.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
+    }
 
-        iconSpriteRenderer.gameObject.SetActive(false);
-
-
-        isTalking = true;
-        TextWriter.AddWriter_Static(textMeshPro, text, 0.02f, true, true, () => {
-
-            isTalking = false;
-
-        });
+    private IEnumerator DestroyAfterDelay()
+    {
+        yield return new WaitForSeconds(DestroyDelay);
+        onDestroyCallback?.Invoke();
+        Destroy(gameObject);
     }
 }
