@@ -20,7 +20,7 @@ public class NPC_State_GiveItemToCustomer : NPCState
 
         worker = npc.GetComponent<NPC_Worker>();
         worker.PlaceItemToStall();
-        ChatBubble.Create(npc.transform, "Here you go.");
+        ChatBubble.Create(npc.transform, "Here you go.",1);
         npcStateMachine.ChangeState(npc.WaitForCustomerState);
 
     }

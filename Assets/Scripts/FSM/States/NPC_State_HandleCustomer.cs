@@ -13,6 +13,7 @@ public class NPC_State_HandleCustomer : NPCState
     public override void AnimationTriggerEvent(NPC.AnimationTriggerType _triggerType)
     {
         base.AnimationTriggerEvent(_triggerType);
+        Debug.Log("???");
     }
 
     public override void EnterState()
@@ -24,12 +25,20 @@ public class NPC_State_HandleCustomer : NPCState
         {
             //Get the item from rack and give to customer.
             worker.MoveTo(worker.targetShop.ReturnItemPickUpPos(worker.currentCustomer.wantToBuy));
-            ChatBubble.Create(npc.transform, "This one’s a good pick. I’ll get it ready for you.");
+            ChatBubble.Create(npc.transform, "This one’s a good pick. I’ll get it ready for you.",1);
         }
         else
         {
-            //TODO: Set worker to wait for another customer and set current customer to leave que
-            npcStateMachine.ChangeState(npc.WaitForCustomerState);
+            //TODO DONE: Set worker to wait for another customer and set current customer to leave que
+            ChatBubble.Create(npc.transform, "Sorry sir. I don't have that one at the moment.", 1,
+                () => 
+                {
+                    worker.currentCustomer.StateMachine.ChangeState(worker.currentCustomer.DeQueFromShop);
+                    npcStateMachine.ChangeState(npc.WaitForCustomerState);
+
+                });
+            
+            
         }
 
     }
@@ -42,9 +51,9 @@ public class NPC_State_HandleCustomer : NPCState
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-        if (npc.agent.remainingDistance < 0.1f && !npc.agent.pathPending)
+        if (npc.agent.remainingDistance < 0.1f && !npc.agent.pathPending && npc.agent.hasPath)
         {
-            npcStateMachine.ChangeState(npc.PickUpState);
+            npcStateMachine.ChangeState(npc.TakeItemFromRack);
         }
     }
 }

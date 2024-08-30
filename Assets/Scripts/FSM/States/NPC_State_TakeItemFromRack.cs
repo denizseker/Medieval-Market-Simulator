@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class NPC_State_PickUp : NPCState
+public class NPC_State_TakeItemFromRack : NPCState
 {
 
     NPC_Worker worker;
 
-    public NPC_State_PickUp(NPC _npc, NPCStateMachine _npcStateMachine) : base(_npc, _npcStateMachine)
+    public NPC_State_TakeItemFromRack(NPC _npc, NPCStateMachine _npcStateMachine) : base(_npc, _npcStateMachine)
     {
     }
 
     public override void AnimationTriggerEvent(NPC.AnimationTriggerType _triggerType)
     {
         base.AnimationTriggerEvent(_triggerType);
+        if (_triggerType == NPC.AnimationTriggerType.AnimationEnded) PickUpAnimDone();
+
     }
 
     public override void EnterState()
@@ -30,9 +32,6 @@ public class NPC_State_PickUp : NPCState
             worker.PickItem();
             _item.PickUp(worker.handPos);
             worker.itemInHand = _item;
-            mySequence.Kill();
-            npcStateMachine.ChangeState(npc.ReturnFromRackWithItemState);
-
         });
     }
 
@@ -44,5 +43,10 @@ public class NPC_State_PickUp : NPCState
     public override void FrameUpdate()
     {
         base.FrameUpdate();
+    }
+
+    private void PickUpAnimDone()
+    {
+        npcStateMachine.ChangeState(npc.ReturnFromRackWithItemState);
     }
 }

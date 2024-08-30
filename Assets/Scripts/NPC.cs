@@ -10,22 +10,26 @@ public class NPC : MonoBehaviour
     public NPCStateMachine StateMachine;
     public NPC_State_Idle IdleState;
     public NPC_State_InQue InQueState;
-    public NPC_State_PickUp PickUpState;
+    public NPC_State_TakeItemFromRack TakeItemFromRack;
     public NPC_State_WaitForCustomer WaitForCustomerState;
     public NPC_State_WaitForWorker WaitForWorkerState;
     public NPC_State_HandleCustomer HandleCustomerState;
     public NPC_State_ReturnFromRackWithItem ReturnFromRackWithItemState;
     public NPC_State_GiveItemToCustomer GiveItemToCustomerState;
     public NPC_State_GoToDespawn GoToDespawnState;
-    private void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
+    public NPC_State_DeQueFromShop DeQueFromShop;
+
+    //Animation behaviour scripts calling this function via B_XXXX script. Every character handling its own situation.
+    public void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
     {
-        //fill
+        StateMachine.CurrentNPCState.AnimationTriggerEvent(_triggerType);
     }
 
+    //Animation behaviour scripts using it.
     public enum AnimationTriggerType
     {
-        PickUp,
-        Drop,
+        AnimationStarted,
+        AnimationEnded,
     }
     public TMP_Text stateText;
     [HideInInspector] public float range = 50.0f;
@@ -41,13 +45,14 @@ public class NPC : MonoBehaviour
         StateMachine = new NPCStateMachine();
         IdleState = new NPC_State_Idle(this, StateMachine);
         InQueState = new NPC_State_InQue(this, StateMachine);
-        PickUpState = new NPC_State_PickUp(this, StateMachine);
+        TakeItemFromRack = new NPC_State_TakeItemFromRack(this, StateMachine);
         WaitForCustomerState = new NPC_State_WaitForCustomer(this, StateMachine);
         WaitForWorkerState = new NPC_State_WaitForWorker(this, StateMachine);
         HandleCustomerState = new NPC_State_HandleCustomer(this, StateMachine);
         ReturnFromRackWithItemState = new NPC_State_ReturnFromRackWithItem(this, StateMachine);
         GiveItemToCustomerState = new NPC_State_GiveItemToCustomer(this, StateMachine);
         GoToDespawnState = new NPC_State_GoToDespawn(this, StateMachine);
+        DeQueFromShop = new NPC_State_DeQueFromShop(this, StateMachine);
 
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();

@@ -8,7 +8,6 @@ public class ChatBubble : MonoBehaviour
     private const float OffsetDef = 0.085f;
     private const float TextWriteSpeedWithItem = 0.03f;
     private const float TextWriteSpeedWithoutItem = 0.02f;
-    private const float DestroyDelay = 2f;
     private static readonly Vector3 BubbleOffset = new Vector3(0, 2, 0);
 
     public bool isTalking;
@@ -20,27 +19,27 @@ public class ChatBubble : MonoBehaviour
     public TextMeshPro fakeTextMeshPro;
 
     // With item display
-    public static ChatBubble Create(Transform parent, SO_Item item, string text, System.Action onDestroyCallback = null)
+    public static ChatBubble Create(Transform parent, SO_Item item, string text, float destroyDelay, System.Action onDestroyCallback = null)
     {
         var chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
         chatBubbleTransform.localPosition = BubbleOffset;
         var chatBubble = chatBubbleTransform.GetComponent<ChatBubble>();
-        chatBubble.Setup(item, text, onDestroyCallback);
+        chatBubble.Setup(item, text, destroyDelay, onDestroyCallback);
         return chatBubble;
     }
 
     // Without item display
-    public static ChatBubble Create(Transform parent, string text, System.Action onDestroyCallback = null)
+    public static ChatBubble Create(Transform parent, string text, float destroyDelay, System.Action onDestroyCallback = null)
     {
         var chatBubbleTransform = Instantiate(GameManager.Instance.chatBubble, parent);
         chatBubbleTransform.localPosition = BubbleOffset;
         var chatBubble = chatBubbleTransform.GetComponent<ChatBubble>();
-        chatBubble.Setup(text, onDestroyCallback);
+        chatBubble.Setup(text,destroyDelay, onDestroyCallback);
         return chatBubble;
     }
 
     // With item display
-    private void Setup(SO_Item item, string text, System.Action onDestroyCallback)
+    private void Setup(SO_Item item, string text, float destroyDelay,System.Action onDestroyCallback)
     {
         this.onDestroyCallback = onDestroyCallback;
         SetupFakeText(text);
@@ -60,12 +59,12 @@ public class ChatBubble : MonoBehaviour
         TextWriter.AddWriter_Static(textMeshPro, text, TextWriteSpeedWithItem, true, true, () =>
         {
             isTalking = false;
-            StartCoroutine(DestroyAfterDelay());
+            StartCoroutine(DestroyAfterDelay(destroyDelay));
         });
     }
 
     // Without item display
-    private void Setup(string text, System.Action onDestroyCallback)
+    private void Setup(string text,float destroyDelay, System.Action onDestroyCallback)
     {
         this.onDestroyCallback = onDestroyCallback;
         SetupFakeText(text);
@@ -85,7 +84,7 @@ public class ChatBubble : MonoBehaviour
         TextWriter.AddWriter_Static(textMeshPro, text, TextWriteSpeedWithoutItem, true, true, () =>
         {
             isTalking = false;
-            StartCoroutine(DestroyAfterDelay());
+            StartCoroutine(DestroyAfterDelay(destroyDelay));
         });
     }
 
@@ -107,9 +106,9 @@ public class ChatBubble : MonoBehaviour
         fakeTextMeshPro.gameObject.transform.SetParent(backgroundSpriteRenderer.transform);
     }
 
-    private IEnumerator DestroyAfterDelay()
+    private IEnumerator DestroyAfterDelay(float destroyDelay)
     {
-        yield return new WaitForSeconds(DestroyDelay);
+        yield return new WaitForSeconds(destroyDelay);
         onDestroyCallback?.Invoke();
         Destroy(gameObject);
     }

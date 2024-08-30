@@ -53,7 +53,7 @@ public class NPC_State_InQue : NPCState
 
     private void AskForItem()
     {
-        ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.");
+        ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.",1);
         npc.transform.DOLookAt(npc.targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
         .OnComplete(() =>
         {

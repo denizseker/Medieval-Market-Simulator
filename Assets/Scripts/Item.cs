@@ -80,11 +80,19 @@ public class Item : MonoBehaviour , IPickable , IInteractable
 
                 //setting boolean when anim completed
                 isAnimCompleted = true;
-                mySequence.Kill();
             });
 
         //Destroying rigidbody for unwanted movements
         Destroy(GetComponent<Rigidbody>());
     }
 
+    public void DropToGround()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DropToPoint(Transform _point)
+    {
+        throw new System.NotImplementedException();
+    }
 }
