@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class NPC_Worker : NPC
+public class NPC_Worker : NPC , IInteractable
 {
     [HideInInspector] public CustomerQueue customerQue;
     [HideInInspector] public NPC_Customer currentCustomer;
@@ -18,6 +18,7 @@ public class NPC_Worker : NPC
         // Initialize current and previous customers to null
         currentCustomer = null;
         previousCustomer = null;
+        targetShop.worker = this;
 
     }
 
@@ -29,7 +30,7 @@ public class NPC_Worker : NPC
         .OnComplete(() =>
         {
             // Drop the item and move it to the stall slot position
-            DropItem();
+            PlayDropAnim();
             itemInHand.transform.parent = null;
             itemInHand.transform.DOMove(targetShop.stallSlotPos.position, 0.5f)
             .OnComplete(() =>
@@ -39,8 +40,6 @@ public class NPC_Worker : NPC
                 targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = false;
                 itemInHand = null;
             });
-            // Set the state back to WaitingForCustomer
-            mySequence.Kill();
         });
     }
 
@@ -61,5 +60,10 @@ public class NPC_Worker : NPC
                 animator.SetBool("Walking", false);
             }
         }
+    }
+
+    public void Interact(Transform _playerTransform)
+    {
+        throw new System.NotImplementedException();
     }
 }

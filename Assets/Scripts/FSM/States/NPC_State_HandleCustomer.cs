@@ -33,7 +33,7 @@ public class NPC_State_HandleCustomer : NPCState
             ChatBubble.Create(npc.transform, "Sorry sir. I don't have that one at the moment.", 1,
                 () => 
                 {
-                    worker.currentCustomer.StateMachine.ChangeState(worker.currentCustomer.DeQueFromShop);
+                    worker.currentCustomer.StateMachine.ChangeState(worker.currentCustomer.DeQueFromShopState);
                     npcStateMachine.ChangeState(npc.WaitForCustomerState);
 
                 });

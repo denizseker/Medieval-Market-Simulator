@@ -17,7 +17,9 @@ public class NPC : MonoBehaviour
     public NPC_State_ReturnFromRackWithItem ReturnFromRackWithItemState;
     public NPC_State_GiveItemToCustomer GiveItemToCustomerState;
     public NPC_State_GoToDespawn GoToDespawnState;
-    public NPC_State_DeQueFromShop DeQueFromShop;
+    public NPC_State_DeQueFromShop DeQueFromShopState;
+    public NPC_State_PayForItem PayForItemState;
+    public NPC_State_TakeItemFromStall TakeItemFromStallState;
 
     //Animation behaviour scripts calling this function via B_XXXX script. Every character handling its own situation.
     public void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
@@ -52,7 +54,10 @@ public class NPC : MonoBehaviour
         ReturnFromRackWithItemState = new NPC_State_ReturnFromRackWithItem(this, StateMachine);
         GiveItemToCustomerState = new NPC_State_GiveItemToCustomer(this, StateMachine);
         GoToDespawnState = new NPC_State_GoToDespawn(this, StateMachine);
-        DeQueFromShop = new NPC_State_DeQueFromShop(this, StateMachine);
+        DeQueFromShopState = new NPC_State_DeQueFromShop(this, StateMachine);
+        PayForItemState = new NPC_State_PayForItem(this, StateMachine);
+        TakeItemFromStallState = new NPC_State_TakeItemFromStall(this, StateMachine);
+
 
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
@@ -74,15 +79,20 @@ public class NPC : MonoBehaviour
         return false;
     }
 
+    public void PlayHandTheMoneyAnim()
+    {
+        animator.SetBool("HandTheMoney", true);
+        animator.Play("HandTheMoney");
+    }
     //Calling when pickup anim start
-    public void PickItem()
+    public void PlayPickAnim()
     {
         animator.Play("PickUp");
         _pickedSomething = true;
         agent.speed = 0.9f;
     }
     //Calling when drop anim start
-    public void DropItem()
+    public void PlayDropAnim()
     {
         if (_pickedSomething)
         {

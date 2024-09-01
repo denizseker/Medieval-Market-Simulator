@@ -52,13 +52,26 @@ public class NPC_State_InQue : NPCState
     }
 
     private void AskForItem()
+
     {
-        ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.",1);
-        npc.transform.DOLookAt(npc.targetShop.transform.position, 1f, AxisConstraint.Y, Vector3.up)
-        .OnComplete(() =>
+        //There is no worker NPC in shop.
+        if (npc.targetShop.worker != null)
         {
+            ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.", 1);
+            npc.transform.DOLookAt(npc.targetShop.stallSlotPos.transform.position, 1f, AxisConstraint.Y, Vector3.up)
+            .OnComplete(() =>
+            {
+                npcStateMachine.ChangeState(npc.WaitForWorkerState);
+            });
+        }
+        //Player should handle customers
+        else
+        {
+            ChatBubble.Create(npc.gameObject.transform, customer.wantToBuy, "I’d like this one. It suits me well.", 1);
+            npc.transform.DOLookAt(npc.targetShop.stallSlotPos.transform.position, 1f, AxisConstraint.Y, Vector3.up);
             npcStateMachine.ChangeState(npc.WaitForWorkerState);
-        });
+        }
+        
     }
 
     private void WaitForQue()

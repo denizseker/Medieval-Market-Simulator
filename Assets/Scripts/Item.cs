@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class Item : MonoBehaviour , IPickable , IInteractable
 {
@@ -20,6 +21,10 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     [HideInInspector] public int itemMaxStackCount;
     [HideInInspector] public bool isItemStackable;
     [HideInInspector] public bool isItemInRack;
+
+
+    private System.Action onAnimCompleted;
+
     public SO_Item _SOItem;
     private void Awake()
     {
@@ -43,9 +48,10 @@ public class Item : MonoBehaviour , IPickable , IInteractable
         PickUp(_player.GetComponent<PlayerController>()._handPos);
     }
 
-    public void PickUp(Transform _handPos)
+    public void PickUp(Transform _handPos,System.Action onAnimCompleted = null)
     {
-        //trigger false for unwanted collisions
+        this.onAnimCompleted = onAnimCompleted;
+        //trigger true for unwanted collisions
         GetComponent<Collider>().isTrigger = true;
         //if item already in rack
         if (isItemInRack)
@@ -80,6 +86,7 @@ public class Item : MonoBehaviour , IPickable , IInteractable
 
                 //setting boolean when anim completed
                 isAnimCompleted = true;
+                onAnimCompleted?.Invoke();  
             });
 
         //Destroying rigidbody for unwanted movements

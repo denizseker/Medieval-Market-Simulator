@@ -18,6 +18,7 @@ public class Shop : MonoBehaviour
     public List<Item> itemList = new List<Item>();
     [SerializeField] protected List<Rack> rackList = new List<Rack>();
     public CustomerQueue customerQue;
+    public NPC_Worker worker;
     public Transform workerSalePos;
     public Transform stallSlotPos;
 

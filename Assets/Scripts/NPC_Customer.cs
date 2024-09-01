@@ -6,6 +6,8 @@ using DG.Tweening;
 public class NPC_Customer : NPC , IInteractable
 {
 
+    public CoinBag coinBag;
+
     [HideInInspector] public SO_Item wantToBuy;
 
     private void Start()
@@ -44,6 +46,29 @@ public class NPC_Customer : NPC , IInteractable
 
     public void Interact(Transform _playerTransform)
     {
-        Debug.Log("Selam");
+        if(StateMachine.CurrentNPCState == WaitForWorkerState)
+        {
+            if(_playerTransform.GetComponent<PlayerController>()._itemInHand?._SOItem == wantToBuy)
+            {
+
+                if (targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty)
+                {
+                    _playerTransform.GetComponent<PlayerController>()._itemInHand.transform.parent = null;
+
+                    //TODO: Move item to stallslot , remove from player hand, set itemInHand to null, set stallslot to not empty , set npc state to dequefromshop
+                    _playerTransform.GetComponent<PlayerController>()._itemInHand.transform.DOMove(targetShop.stallSlotPos.transform.position, 0.5f)
+                    .OnComplete(() =>
+                        {
+                            targetShop.stallSlotPos.GetComponent<Slot_Stall>()._item = _playerTransform.GetComponent<PlayerController>()._itemInHand;
+                            
+                            _playerTransform.GetComponent<PlayerController>()._itemInHand = null;
+                            targetShop.stallSlotPos.GetComponent<Slot_Stall>()._isEmpty = false;   
+                        });
+                }
+
+
+            }
+            else { Debug.Log("Not Same"); }
+        }
     }
 }

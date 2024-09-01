@@ -29,7 +29,7 @@ public class NPC_State_TakeItemFromRack : NPCState
         mySequence.Append(worker.transform.DOLookAt(worker.targetShop.ReturnItemPickUpPos(worker.currentCustomer.wantToBuy).position, 0.5f, AxisConstraint.Y))
         .OnComplete(() =>
         {
-            worker.PickItem();
+            worker.PlayPickAnim();
             _item.PickUp(worker.handPos);
             worker.itemInHand = _item;
         });
