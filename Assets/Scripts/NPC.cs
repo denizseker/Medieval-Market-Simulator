@@ -20,6 +20,7 @@ public class NPC : MonoBehaviour
     public NPC_State_DeQueFromShop DeQueFromShopState;
     public NPC_State_PayForItem PayForItemState;
     public NPC_State_TakeItemFromStall TakeItemFromStallState;
+    public NPC_State_TakeMoneyFromCustomer TakeMoneyFromCustomerState;
 
     //Animation behaviour scripts calling this function via B_XXXX script. Every character handling its own situation.
     public void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
@@ -57,6 +58,7 @@ public class NPC : MonoBehaviour
         DeQueFromShopState = new NPC_State_DeQueFromShop(this, StateMachine);
         PayForItemState = new NPC_State_PayForItem(this, StateMachine);
         TakeItemFromStallState = new NPC_State_TakeItemFromStall(this, StateMachine);
+        TakeMoneyFromCustomerState = new NPC_State_TakeMoneyFromCustomer(this, StateMachine);
 
 
         agent = GetComponent<NavMeshAgent>();

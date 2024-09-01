@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NPC_State_PayForItem : NPCState
 {
+    public bool isAnimDone = false;
+
     public NPC_State_PayForItem(NPC _npc, NPCStateMachine _npcStateMachine) : base(_npc, _npcStateMachine)
     {
     }
@@ -11,6 +13,9 @@ public class NPC_State_PayForItem : NPCState
     public override void AnimationTriggerEvent(NPC.AnimationTriggerType _triggerType)
     {
         base.AnimationTriggerEvent(_triggerType);
+
+        if(_triggerType == NPC.AnimationTriggerType.AnimationEnded) isAnimDone = true;
+
     }
 
     public override void EnterState()
@@ -31,6 +36,7 @@ public class NPC_State_PayForItem : NPCState
     {
         base.ExitState();
         npc.GetComponent<NPC_Customer>().coinBag.gameObject.SetActive(false);
+        isAnimDone = false;
     }
 
     public override void FrameUpdate()
