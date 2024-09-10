@@ -32,6 +32,7 @@ public class NPC : MonoBehaviour
     public enum AnimationTriggerType
     {
         AnimationStarted,
+        AnimationHalfwayDone,
         AnimationEnded,
     }
     public TMP_Text stateText;

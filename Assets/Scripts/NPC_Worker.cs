@@ -14,12 +14,12 @@ public class NPC_Worker : NPC , IInteractable
         // Initialize the state machine with the WaitForCustomerState
         StateMachine.Initialize(WaitForCustomerState);
         // Get the customer queue from the target shop
+        targetShop = GetComponentInParent<Shop>();
         customerQue = targetShop.GetComponentInChildren<CustomerQueue>();
         // Initialize current and previous customers to null
         currentCustomer = null;
         previousCustomer = null;
-        targetShop.worker = this;
-
+        
     }
 
     public void PlaceItemToStall()
@@ -30,7 +30,7 @@ public class NPC_Worker : NPC , IInteractable
         .OnComplete(() =>
         {
             // Drop the item and move it to the stall slot position
-            PlayDropAnim();
+            
             itemInHand.transform.parent = null;
             itemInHand.transform.DOMove(targetShop.stallSlotPos.position, 0.5f)
             .OnComplete(() =>

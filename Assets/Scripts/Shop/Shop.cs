@@ -110,6 +110,7 @@ public class Shop : MonoBehaviour
     void Start()
     {
         GameManager.Instance.shopList.Add(this);
+        worker = GetComponentInChildren<NPC_Worker>();
     }
 
 }

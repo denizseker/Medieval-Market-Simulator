@@ -25,7 +25,6 @@ public class InteractHandler : MonoBehaviour
     {
         if (playerController._itemInHand.isAnimCompleted)
         {
-            Debug.Log("Drop item?");
             //deattach from parent
             playerController._itemInHand.transform.parent = null;
             //adding rigidbody back and setting its values
@@ -58,23 +57,71 @@ public class InteractHandler : MonoBehaviour
             
 
     }
+
     public void InteractKeyPressed(InputAction.CallbackContext context)
     {
-        if (context.started && highlight != null && highlight.TryGetComponent<IInteractable>(out var interactable))
+        if (context.started) //KEY PRESSED
         {
-            bool isHandEmpty = playerController._itemInHand == null;
-
-            if (interactable != null)
+            if (highlight != null) //if something outlined/interactable already
             {
-                interactable.Interact(transform);
-            }
-            else if (highlight.GetComponent<Item>() != null && playerController._itemInHand.isAnimCompleted)
-            {
-                DropItem();
-                interactable.Interact(transform);
+                //target is interactable
+                if (highlight.TryGetComponent(typeof(IInteractable), out Component component))
+                {
+                    //hand is empty, interact with object.
+                    if (playerController._itemInHand == null)
+                    {
+                        highlight.GetComponent<IInteractable>().Interact(transform);
+                    }
+                    //hand is not empty
+                    else
+                    {
+                        //hand not empty and interacted with rack
+                        if (highlight.GetComponent<Rack>() != null)
+                        {
+                            highlight.GetComponent<IInteractable>().Interact(transform);
+                        }
+                        //hand not empty and interacted with another item
+                        if (highlight.GetComponent<Item>() != null)
+                        {
+                            if (playerController._itemInHand.isAnimCompleted)
+                            {
+                                DropItem();
+                                highlight.GetComponent<IInteractable>().Interact(transform);
+                            }
+                        }
+                        //hand not empty interacted with label
+                        if (highlight.GetComponent<Label>() != null)
+                        {
+                            highlight.GetComponent<IInteractable>().Interact(transform);
+                        }
+                        //hand not empty interacted with NPC
+                        if (highlight.GetComponent<NPC>() != null)
+                        {
+                            highlight.GetComponent<IInteractable>().Interact(transform);
+                        }
+                    }
+                }
             }
         }
     }
+
+    //public void InteractKeyPressed(InputAction.CallbackContext context)
+    //{
+    //    if (context.started && highlight != null && highlight.TryGetComponent<IInteractable>(out var interactable))
+    //    {
+    //        bool isHandEmpty = playerController._itemInHand == null;
+
+    //        if (interactable != null)
+    //        {
+    //            interactable.Interact(transform);
+    //        }
+    //        else if (highlight.GetComponent<Item>() != null && playerController._itemInHand.isAnimCompleted)
+    //        {
+    //            DropItem();
+    //            interactable.Interact(transform);
+    //        }
+    //    }
+    //}
 
 
     void Update()

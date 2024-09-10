@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
 
-public class Outline : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
+public class Outline : MonoBehaviour
 {
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
@@ -141,26 +141,6 @@ public class Outline : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
         }
         
     }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        //float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-        //if(distance < 7f)
-        //{
-        //    Item _item = GetComponent<Item>();
-        //    ShowOutline();
-        //    TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
-        //}
-        
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        //HideOutline();
-        //TooltipScreenSpaceUI.HideTooltip_Static();
-    }
-
-
 
     private void OnMouseOver()
     {
