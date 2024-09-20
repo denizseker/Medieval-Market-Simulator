@@ -137,8 +137,10 @@ public class InteractHandler : MonoBehaviour
             }
             
         }
+        Debug.DrawRay(cameraTransform.position, cameraTransform.forward * interactDistance, Color.red);
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit raycastHit, interactDistance, interactableLayer))
         {
+            Debug.Log(raycastHit.transform.name);
             highlight = raycastHit.transform;
             if (highlight != selection)
             {

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,11 +18,18 @@ public class NPC_State_ShopInterest : NPCState
     {
         base.EnterState();
         Debug.Log("ShopInterestState");
+        npc.transform.DOLookAt(npc.targetShop.stallSlotPos.transform.position, 0.5f, AxisConstraint.Y, Vector3.up);
+        npc.animator.SetBool("InterestIdle", true);
+        DOVirtual.DelayedCall(2, () =>
+        {
+            npc.StateMachine.ChangeState( npc.MoveToShopQueueState);
+        });
     }
 
     public override void ExitState()
     {
         base.ExitState();
+        npc.animator.SetBool("InterestIdle", false);
     }
 
     public override void FrameUpdate()

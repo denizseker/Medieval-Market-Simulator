@@ -28,8 +28,8 @@ public class NPC_Customer : NPC , IInteractable
     {
         wantToBuy = _wantToBuy;
         targetShop = GameManager.Instance.GetShopForCustomer(this);
-        NPC_State_MoveToShopQue moveToShopQue = new NPC_State_MoveToShopQue(this, StateMachine, targetShop.ReturnQueSlot(this).transform);
-        StateMachine.ChangeState(moveToShopQue);
+        //NPC_State_MoveToShopQue moveToShopQue = new NPC_State_MoveToShopQue(this, StateMachine, targetShop.ReturnQueSlot(this).transform);
+        //StateMachine.ChangeState(moveToShopQue);
     }
  
     private void Update()
@@ -50,8 +50,10 @@ public class NPC_Customer : NPC , IInteractable
         }
     }
 
+    //Press E on NPC
     public void Interact(Transform _playerTransform)
     {
+        //Giving item to NPC if it waiting for it
         if(StateMachine.CurrentNPCState == WaitForWorkerState)
         {
             if(_playerTransform.GetComponent<PlayerController>()._itemInHand?._SOItem == wantToBuy)

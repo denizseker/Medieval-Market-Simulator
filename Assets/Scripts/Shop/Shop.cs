@@ -71,6 +71,12 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void AddCustomerToQue(NPC_Customer npc)
+    {
+        if(!customerQue._isQueueFull) customerQue.AddCustomerToQueue(npc);
+        else Debug.Log("Queue is full");
+    }
+
     public CustomerQueueSlot ReturnQueSlot(NPC _npc)
     {
         for (int i = 0; i < customerQue.queSlotList.Count; i++)

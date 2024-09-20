@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 7766688875613117356}
   - component: {fileID: 6860680878359530118}
   - component: {fileID: 7068912815363874196}
+  - component: {fileID: 516812273334019753}
   m_Layer: 7
   m_Name: Item_CoinBag (1)
   m_TagString: Untagged
@@ -472,7 +473,7 @@ CapsuleCollider:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 2
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
@@ -481,6 +482,33 @@ CapsuleCollider:
   m_Height: 0.20211674
   m_Direction: 1
   m_Center: {x: -0.00000047683716, y: 0.0000009536743, z: 0}
+--- !u!54 &516812273334019753
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010613315036047583}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1317717795281262123
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +622,7 @@ GameObject:
   - component: {fileID: 2182998995634670669}
   - component: {fileID: 2076484183676801626}
   - component: {fileID: 1971340531088806960}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Customer_NPC
   m_TagString: CustomerNPC
   m_Icon: {fileID: 0}

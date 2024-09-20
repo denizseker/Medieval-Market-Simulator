@@ -23,6 +23,7 @@ public class NPC : MonoBehaviour
     public NPC_State_TakeMoneyFromCustomer TakeMoneyFromCustomerState;
     public NPC_State_ShopInterest ShopInterestState;
     public NPC_State_FreeRoam FreeRoamState;
+    public NPC_State_MoveToShopQue MoveToShopQueueState;
 
     //Animation behaviour scripts calling this function via B_XXXX script. Every character handling its own situation.
     public void AnimationTriggerEvent(AnimationTriggerType _triggerType) 
@@ -64,6 +65,7 @@ public class NPC : MonoBehaviour
         TakeMoneyFromCustomerState = new NPC_State_TakeMoneyFromCustomer(this, StateMachine);
         ShopInterestState = new NPC_State_ShopInterest(this, StateMachine);
         FreeRoamState = new NPC_State_FreeRoam(this, StateMachine);
+        MoveToShopQueueState = new NPC_State_MoveToShopQue(this, StateMachine);
 
 
         agent = GetComponent<NavMeshAgent>();
@@ -91,6 +93,11 @@ public class NPC : MonoBehaviour
         animator.SetBool("HandTheMoney", true);
         animator.Play("HandTheMoney");
     }
+    public void PlayInterestIdle()
+    {
+        animator.SetBool("InterestIdle", true);
+        //animator.Play("InterestIdle");
+    }
     //Calling when pickup anim start
     public void PlayPickAnim()
     {
@@ -111,6 +118,19 @@ public class NPC : MonoBehaviour
     public void MoveTo(Transform _target)
     {
         agent.SetDestination(_target.position);
+        if (_pickedSomething)
+        {
+            animator.SetBool("CarryWalk", true);
+
+        }
+        else
+        {
+            animator.SetBool("Walking", true);
+        }
+    }
+    public void MoveTo(Vector3 _target)
+    {
+        agent.SetDestination(_target);
         if (_pickedSomething)
         {
             animator.SetBool("CarryWalk", true);

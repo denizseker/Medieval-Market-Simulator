@@ -46,8 +46,7 @@ public class NPC_State_InQue : NPCState
 
     private void CheckQue()
     {
-        NPC_State_MoveToShopQue moveToShopQue = new NPC_State_MoveToShopQue(npc, npc.StateMachine, npc.targetShop.ReturnQueSlot(npc).transform);
-        npc.StateMachine.ChangeState(moveToShopQue);
+        npc.StateMachine.ChangeState(npc.MoveToShopQueueState);
         //npc.MoveTo(npc.targetShop.ReturnQueSlot(npc).transform);
     }
 
