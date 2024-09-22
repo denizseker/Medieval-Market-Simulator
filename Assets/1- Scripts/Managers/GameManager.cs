@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     public Transform chatBubble;
     public Transform deSpawnTransform;
 
-
     public void Deneme(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -38,6 +37,11 @@ public class GameManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public SO_Item GetRandomItem()
+    {
+        return SOItemList[Random.Range(0, SOItemList.Count)];
     }
 
     private void SetCustomerToShop()

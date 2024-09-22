@@ -9,7 +9,7 @@ public class CustomerQueue : MonoBehaviour
     public bool _isQueueFull;
 
 
-    public UnityEvent deneme;
+    public UnityEvent onQueChange;
 
 
     public CustomerQueueSlot AddCustomerToQueue(NPC_Customer _npc)
@@ -37,23 +37,25 @@ public class CustomerQueue : MonoBehaviour
                     queSlotList[i]._isSlotEmpty = true;
                     queSlotList[i].npc = null;
                     ReOrderQue(i);
-                    deneme.Invoke();
+                    onQueChange.Invoke();
+                    break;
                 }
             }
         }
     }
 
-
     public void ReOrderQue(int _fromThisIndex)
     {
-        for (int i = _fromThisIndex; i < queSlotList.Count; i++)
+        for (int i = _fromThisIndex; i < queSlotList.Count - 1; i++)
         {
-            if (i + 1 < queSlotList.Count)
+            if (queSlotList[i + 1]._isSlotEmpty)
             {
-                queSlotList[i]._isSlotEmpty = queSlotList[i + 1]._isSlotEmpty;
-                queSlotList[i].npc = queSlotList[i + 1].npc;
+                break;
             }
-
+            queSlotList[i].npc = queSlotList[i + 1].npc;
+            queSlotList[i]._isSlotEmpty = false;
+            queSlotList[i + 1].npc = null;
+            queSlotList[i + 1]._isSlotEmpty = true;
         }
     }
 

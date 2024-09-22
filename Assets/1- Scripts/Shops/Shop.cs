@@ -17,10 +17,12 @@ public class Shop : MonoBehaviour
     protected ShopType shopType;
     public List<Item> itemList = new List<Item>();
     [SerializeField] protected List<Rack> rackList = new List<Rack>();
-    public CustomerQueue customerQue;
+    [HideInInspector] public CustomerQueue customerQue;
     public NPC_Worker worker;
     public Transform workerSalePos;
-    public Transform stallSlotPos;
+    [HideInInspector] public Transform stallSlotPos;
+
+
 
     public bool IsShopHaveItem(SO_Item _SOItem)
     {
@@ -76,6 +78,10 @@ public class Shop : MonoBehaviour
         if(!customerQue._isQueueFull) customerQue.AddCustomerToQueue(npc);
         else Debug.Log("Queue is full");
     }
+    public void RemoveCustomerFromQue(NPC_Customer npc)
+    {
+        customerQue.RemoveCustomerFromQue(npc);
+    }
 
     public CustomerQueueSlot ReturnQueSlot(NPC _npc)
     {
@@ -117,6 +123,9 @@ public class Shop : MonoBehaviour
     {
         GameManager.Instance.shopList.Add(this);
         worker = GetComponentInChildren<NPC_Worker>();
+        customerQue = GetComponentInChildren<CustomerQueue>();
+        stallSlotPos = GetComponentInChildren<Slot_Stall>().transform;
+
     }
 
 }

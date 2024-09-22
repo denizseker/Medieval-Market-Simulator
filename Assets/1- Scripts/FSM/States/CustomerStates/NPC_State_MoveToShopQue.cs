@@ -20,7 +20,6 @@ public class NPC_State_MoveToShopQue : NPCState
     {
         base.EnterState();
         npc.targetShop.AddCustomerToQue(npc.GetComponent<NPC_Customer>());
-        npc.GetComponent<NPC_Customer>().wantToBuy = GameManager.Instance.SOItemList[0];
         target = npc.targetShop.ReturnQueSlot(npc).transform;
         npc.MoveTo(target);
     }

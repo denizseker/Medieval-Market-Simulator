@@ -17,12 +17,24 @@ public class NPC_State_ShopInterest : NPCState
     public override void EnterState()
     {
         base.EnterState();
-        Debug.Log("ShopInterestState");
         npc.transform.DOLookAt(npc.targetShop.stallSlotPos.transform.position, 0.5f, AxisConstraint.Y, Vector3.up);
         npc.animator.SetBool("InterestIdle", true);
-        DOVirtual.DelayedCall(2, () =>
+        SO_Item tempWantToBuy = GameManager.Instance.GetRandomItem();
+
+        DOVirtual.DelayedCall(Random.Range(1.5f, 5f), () =>
         {
-            npc.StateMachine.ChangeState( npc.MoveToShopQueueState);
+            if (npc.targetShop.IsShopHaveItem(tempWantToBuy))
+            {
+                ChatBubble.Create(npc.gameObject.transform, tempWantToBuy, "I found what I want.", 1);
+                npc.GetComponent<NPC_Customer>().wantToBuy = tempWantToBuy;
+                npc.StateMachine.ChangeState(npc.MoveToShopQueueState);
+            }
+            else
+            {
+                ChatBubble.Create(npc.gameObject.transform, tempWantToBuy, "I can't find what I want.", 1);
+                npc.StateMachine.ChangeState(npc.FreeRoamState);
+            }
+            
         });
     }
 
@@ -35,17 +47,5 @@ public class NPC_State_ShopInterest : NPCState
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

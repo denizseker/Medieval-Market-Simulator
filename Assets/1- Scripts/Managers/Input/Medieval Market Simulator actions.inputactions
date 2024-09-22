@@ -284,7 +284,7 @@
                 {
                     "name": "Right",
                     "id": "593bfc2b-379c-4e47-a724-850406384415",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "Scale(factor=10)",
                     "groups": "Keyboard&Mouse",
