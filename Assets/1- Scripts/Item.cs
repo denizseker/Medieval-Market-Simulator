@@ -26,6 +26,7 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     private System.Action onAnimCompleted;
 
     public SO_Item _SOItem;
+
     private void Awake()
     {
         itemType = _SOItem._itemType;
@@ -67,17 +68,6 @@ public class Item : MonoBehaviour , IPickable , IInteractable
         transform.parent = _handPos.transform;
         //Animation gonna start so setting the bool
         isAnimCompleted = false;
-        //Creating move and rotate sequence for pickup anim
-        //Sequence mySequence = DOTween.Sequence();
-        //mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.6f))
-        //    .Join(transform.DOLocalRotate(new Vector3(-35, 0, 90),0.2f))
-        //    .Insert(0.3f,transform.DOLocalRotate(new Vector3(-35, 0, 90), 0.3f,RotateMode.FastBeyond360).SetEase(Ease.OutBack))
-        //    .OnComplete(() => {
-
-        //        //setting boolean when anim completed
-        //        isAnimCompleted = true;
-        //        mySequence.Kill();
-        //    });
 
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.5f))

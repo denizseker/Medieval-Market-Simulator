@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
             Instance = this;
         }
 
-        Application.targetFrameRate = 360;
+        Application.targetFrameRate = -1;
         
     }
 

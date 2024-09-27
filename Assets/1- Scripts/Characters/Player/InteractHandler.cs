@@ -147,7 +147,6 @@ public class InteractHandler : MonoBehaviour
                 {
                     highlight.gameObject.GetComponent<Outline>().enabled = true;
                     highlight.gameObject.GetComponent<Outline>().ShowOutline();
-
                 }
             }
             else

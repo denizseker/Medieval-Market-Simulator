@@ -37,8 +37,6 @@ public class NPC_State_HandleCustomer : NPCState
                     npcStateMachine.ChangeState(npc.WaitForCustomerState);
 
                 });
-            
-            
         }
 
     }

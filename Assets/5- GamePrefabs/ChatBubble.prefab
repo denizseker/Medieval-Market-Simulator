@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7129420745883034657}
   - component: {fileID: 3963036833605435213}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ChatBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 4035143552127713422}
   - component: {fileID: 821606255533670958}
   - component: {fileID: 345190093932052264}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FakeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 397848015238007299}
   - component: {fileID: 6618830954352946596}
   - component: {fileID: 8633300959739829873}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6488488842301657351}
   - component: {fileID: 3945205691463593292}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ItemBackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6606924871988640245}
   - component: {fileID: 311608909750360653}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ItemPNG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   - component: {fileID: 9060981555893822273}
   - component: {fileID: 1636642713647321933}
   - component: {fileID: 8503250426352437343}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
