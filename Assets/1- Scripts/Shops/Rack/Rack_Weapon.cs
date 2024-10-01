@@ -18,7 +18,7 @@ public class Rack_Weapon : Rack
                 //if there is empty slot
                 if (_item.transform.parent != null)
                 {
-                    _item.GetComponent<Collider>().isTrigger = true;
+                    _item.GetComponentInChildren<Collider>().isTrigger = true;
                     _item.isAnimCompleted = false;
                     //Creating move and rotate sequence for pickup anim
                     Sequence mySequence = DOTween.Sequence();

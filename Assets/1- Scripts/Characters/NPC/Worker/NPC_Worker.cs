@@ -19,7 +19,11 @@ public class NPC_Worker : NPC , IInteractable
         // Initialize current and previous customers to null
         currentCustomer = null;
         previousCustomer = null;
-        
+        int qualityLevel = QualitySettings.GetQualityLevel();
+        string qualityName = QualitySettings.names[qualityLevel];
+
+        Debug.Log("Current Quality Level: " + qualityName);
+
     }
 
     public void PlaceItemToStall()

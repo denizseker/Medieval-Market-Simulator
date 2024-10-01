@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
 
-public class Outline : MonoBehaviour
+public class OutlineEditor : MonoBehaviour
 {
   private static HashSet<Mesh> registeredMeshes = new HashSet<Mesh>();
 
@@ -102,7 +102,10 @@ public class Outline : MonoBehaviour
     needsUpdate = true;
   }
 
-
+    private void Start()
+    {
+        ShowOutline();
+    }
     public void ShowOutline()
     {
         if (additionalMaterialApplied)
@@ -130,7 +133,6 @@ public class Outline : MonoBehaviour
         }
         foreach (var renderer in renderers)
         {
-            TooltipScreenSpaceUI.HideTooltip_Static();
             // Remove outline shaders
             var materials = renderer.sharedMaterials.ToList();
 

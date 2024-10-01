@@ -53,7 +53,7 @@ public class Item : MonoBehaviour , IPickable , IInteractable
     {
         this.onAnimCompleted = onAnimCompleted;
         //trigger true for unwanted collisions
-        GetComponent<Collider>().isTrigger = true;
+        GetComponentInChildren<Collider>().isTrigger = true;
         //if item already in rack
         if (isItemInRack)
         {

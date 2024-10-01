@@ -39,7 +39,7 @@ public class InteractHandler : MonoBehaviour
             _rb.AddForce(((cameraTransform.transform.forward + cameraTransform.transform.up) * 2), ForceMode.VelocityChange);
 
             //setting trigger false so it can interact with world
-            playerController._itemInHand.GetComponent<Collider>().isTrigger = false;
+            playerController._itemInHand.GetComponentInChildren<Collider>().isTrigger = false;
             //hand is empty now
             playerController._itemInHand = null;
         }
@@ -147,6 +147,10 @@ public class InteractHandler : MonoBehaviour
                 {
                     highlight.gameObject.GetComponent<Outline>().enabled = true;
                     highlight.gameObject.GetComponent<Outline>().ShowOutline();
+                }
+                if(highlight.gameObject.GetComponent<Item>() != null)
+                {
+                    TooltipScreenSpaceUI.ShowTooltip_Static(highlight.gameObject.GetComponent<Item>().itemName, highlight.gameObject.GetComponent<Item>().itemDesc, highlight.gameObject.GetComponent<Item>().itemType, highlight.gameObject.GetComponent<Item>().itemPrice);
                 }
             }
             else
