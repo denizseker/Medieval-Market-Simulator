@@ -3668,6 +3668,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdc9008f8eaf304bb37647da5cf75cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chatBubble: {fileID: 7129420745883034657, guid: 21bb0f2cef6b12c4c81fce7b08b19e00,
+    type: 3}
+  deSpawnTransform: {fileID: 1455752494}
   shopList: []
   SOItemList:
   - {fileID: 11400000, guid: d5488a139fcf13948b541b52bfba1c9c, type: 2}
@@ -3679,9 +3682,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f97aca547a2eb0f4c9d83aa2f248a3fb, type: 2}
   - {fileID: 11400000, guid: fbd3894cdc70caf41a4f2fb6ef4532e8, type: 2}
   npcCustomerList: []
-  chatBubble: {fileID: 7129420745883034657, guid: 21bb0f2cef6b12c4c81fce7b08b19e00,
-    type: 3}
-  deSpawnTransform: {fileID: 1455752494}
+  onGoldChange:
+    m_PersistentCalls:
+      m_Calls: []
+  onReputationChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1575570888
 GameObject:
   m_ObjectHideFlags: 0
@@ -4889,7 +4895,7 @@ PrefabInstance:
     - target: {fileID: 9159315070593594585, guid: 8ffeda21460028b4a8e4cf6b79319954,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

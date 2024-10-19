@@ -40,7 +40,10 @@ public class NPC_State_TakeMoneyFromCustomer : NPCState
         if (worker.currentCustomer.StateMachine.CurrentNPCState == worker.currentCustomer.PayForItemState && worker.currentCustomer.PayForItemState.isAnimDone)
         {
             npc.animator.Play("PickUpWithoutCarry");
+            //Interacting with moneybag on npc's hand
             worker.currentCustomer.GetComponentInChildren<CoinBag>().Interact(null);
+            //if this shop owner is player, adding money to player's money
+            if (worker.targetShop.isOwnerPlayer) GameManager.Instance.ChangeGold(worker.currentCustomer.wantToBuy._itemPrice);
             npcStateMachine.ChangeState(npc.WaitForCustomerState);
         }
     }

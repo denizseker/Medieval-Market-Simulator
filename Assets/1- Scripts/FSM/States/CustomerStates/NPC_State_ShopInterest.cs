@@ -27,6 +27,7 @@ public class NPC_State_ShopInterest : NPCState
             {
                 ChatBubble.Create(npc.gameObject.transform, tempWantToBuy, "I found what I want.", 1);
                 npc.GetComponent<NPC_Customer>().wantToBuy = tempWantToBuy;
+                npc.GetComponent<NPC_Customer>().ShowItemPreview();
                 npc.StateMachine.ChangeState(npc.MoveToShopQueueState);
             }
             else

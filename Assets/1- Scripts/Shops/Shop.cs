@@ -15,6 +15,7 @@ public class Shop : MonoBehaviour
     }
 
     protected ShopType shopType;
+    public bool isOwnerPlayer = false;
     public List<Item> itemList = new List<Item>();
     [SerializeField] protected List<Rack> rackList = new List<Rack>();
     [HideInInspector] public CustomerQueue customerQue;

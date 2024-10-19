@@ -1,39 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager Instance;
+
+    public Transform chatBubble;
+    public Transform deSpawnTransform;
 
 
     public List<Shop> shopList = new List<Shop>();
     public List<SO_Item> SOItemList = new List<SO_Item>();
     public List<NPC_Customer> npcCustomerList = new List<NPC_Customer>();
 
-    public Transform chatBubble;
-    public Transform deSpawnTransform;
+    
+
+
+    //events
+    public UnityEvent onGoldChange;
+    public UnityEvent onReputationChange;
+    //player stats
+    public int PlayerGold { get; private set; } = 500;
+    public int PlayerReputation { get; private set; } = 0;
 
     public void Deneme(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            SetCustomerToShop();
+            
         }
         
     }
 
-
-    public Shop GetShopForCustomer(NPC_Customer _npc)
+    public Shop GetShopForCustomer(NPC_Customer npc)
     {
-        for (int i = 0; i < shopList.Count; i++)
+        foreach (var shop in shopList)
         {
-            if (!shopList[i].GetComponentInChildren<CustomerQueue>()._isQueueFull)
+            var customerQueue = shop.GetComponentInChildren<CustomerQueue>();
+            if (!customerQueue._isQueueFull)
             {
-                shopList[i].GetComponentInChildren<CustomerQueue>().AddCustomerToQueue(_npc);
-                return shopList[i];
+                customerQueue.AddCustomerToQueue(npc);
+                return shop;
             }
         }
         return null;
@@ -44,13 +54,6 @@ public class GameManager : MonoBehaviour
         return SOItemList[Random.Range(0, SOItemList.Count)];
     }
 
-    private void SetCustomerToShop()
-    {
-        for (int i = 0; i < npcCustomerList.Count; i++)
-        {
-            npcCustomerList[i].GetComponent<NPC_Customer>().SetCustomer(SOItemList[0]);
-        }
-    }
 
     private void Awake()
     {
@@ -65,8 +68,15 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void Update()
+    public void ChangeGold(int _gold)
     {
-        
+        PlayerGold += _gold;
+        onGoldChange.Invoke();
     }
+    public void ChangeReputation(int _reputation)
+    {
+        PlayerReputation += _reputation;
+        onReputationChange.Invoke();
+    }
+
 }

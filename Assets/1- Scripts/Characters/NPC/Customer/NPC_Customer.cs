@@ -9,8 +9,8 @@ public class NPC_Customer : NPC , IInteractable
 {
 
     public CoinBag coinBag;
-
     public SO_Item wantToBuy;
+    public Transform previewPos;
 
 
 
@@ -48,6 +48,11 @@ public class NPC_Customer : NPC , IInteractable
                 animator.SetBool("Walking", false);
             }
         }
+    }
+
+    public void ShowItemPreview()
+    {
+        Instantiate(wantToBuy._itemPrefab, previewPos.position, Quaternion.identity);
     }
 
     //Press E on NPC
