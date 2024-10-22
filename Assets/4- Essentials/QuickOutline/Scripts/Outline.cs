@@ -143,25 +143,6 @@ public class Outline : MonoBehaviour
         
     }
 
-    private void OnMouseOver()
-    {
-        //float distance = Vector3.Distance(PlayerController.Instance.transform.position, transform.position);
-        //if (distance <= 7f)
-        //{
-        //    if (TryGetComponent(out Item component))
-        //    {
-        //        Item _item = GetComponent<Item>();
-        //        TooltipScreenSpaceUI.ShowTooltip_Static(_item.itemName, _item.itemDesc, _item.itemType, _item.itemPrice);
-        //    }
-        //    ShowOutline();
-        //}
-        //else
-        //{
-        //    HideOutline();
-        //    TooltipScreenSpaceUI.HideTooltip_Static();
-        //}
-    }
-
     void OnValidate() {
 
     // Update material properties

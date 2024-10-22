@@ -19,7 +19,17 @@ public class NPC_State_ShopInterest : NPCState
         base.EnterState();
         npc.transform.DOLookAt(npc.targetShop.stallSlotPos.transform.position, 0.5f, AxisConstraint.Y, Vector3.up);
         npc.animator.SetBool("InterestIdle", true);
-        SO_Item tempWantToBuy = GameManager.Instance.GetRandomItem();
+
+        SO_Item tempWantToBuy;
+        if (GameManager.Instance.RandomOrExistingItem)
+        {
+            tempWantToBuy = GameManager.Instance.GetRandomItem();
+        }
+        else
+        {
+            tempWantToBuy = npc.targetShop.GetExistingItemFromShop();
+        }
+        
 
         DOVirtual.DelayedCall(Random.Range(1.5f, 5f), () =>
         {
@@ -27,7 +37,7 @@ public class NPC_State_ShopInterest : NPCState
             {
                 ChatBubble.Create(npc.gameObject.transform, tempWantToBuy, "I found what I want.", 1);
                 npc.GetComponent<NPC_Customer>().wantToBuy = tempWantToBuy;
-                npc.GetComponent<NPC_Customer>().ShowItemPreview();
+                //npc.GetComponent<NPC_Customer>().ShowItemPreview();
                 npc.StateMachine.ChangeState(npc.MoveToShopQueueState);
             }
             else

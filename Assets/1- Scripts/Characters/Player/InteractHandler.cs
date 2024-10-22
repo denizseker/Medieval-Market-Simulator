@@ -8,8 +8,6 @@ using UnityEngine.InputSystem;
 public class InteractHandler : MonoBehaviour
 {
     private PlayerController playerController;
-    private Transform highlight;
-    private Transform selection;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float interactDistance;
@@ -28,9 +26,11 @@ public class InteractHandler : MonoBehaviour
             //deattach from parent
             playerController._itemInHand.transform.parent = null;
             //adding rigidbody back and setting its values
-            Rigidbody _rb = playerController._itemInHand.gameObject.AddComponent<Rigidbody>();
+            //Rigidbody _rb = playerController._itemInHand.gameObject.AddComponent<Rigidbody>();
+            Rigidbody _rb = playerController._itemInHand.GetComponent<Rigidbody>();
+            _rb.isKinematic = false;
             _rb.interpolation = RigidbodyInterpolation.Interpolate;
-            _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             _rb.useGravity = true;
             _rb.excludeLayers = LayerMask.GetMask("Player");
 
@@ -62,42 +62,44 @@ public class InteractHandler : MonoBehaviour
     {
         if (context.started) //KEY PRESSED
         {
-            if (highlight != null) //if something outlined/interactable already
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit raycastHit, interactDistance, interactableLayer))
             {
+                Transform target = raycastHit.transform;
                 //target is interactable
-                if (highlight.TryGetComponent(typeof(IInteractable), out Component component))
+
+                if (target.TryGetComponent(typeof(IInteractable), out Component component))
                 {
                     //hand is empty, interact with object.
                     if (playerController._itemInHand == null)
                     {
-                        highlight.GetComponent<IInteractable>().Interact(transform);
+                        target.GetComponent<IInteractable>().Interact(transform);
                     }
                     //hand is not empty
                     else
                     {
                         //hand not empty and interacted with rack
-                        if (highlight.GetComponent<Rack>() != null)
+                        if (target.GetComponent<Rack>() != null)
                         {
-                            highlight.GetComponent<IInteractable>().Interact(transform);
+                            target.GetComponent<IInteractable>().Interact(transform);
                         }
                         //hand not empty and interacted with another item
-                        if (highlight.GetComponent<Item>() != null)
+                        if (target.GetComponent<Item>() != null)
                         {
                             if (playerController._itemInHand.isAnimCompleted)
                             {
                                 DropItem();
-                                highlight.GetComponent<IInteractable>().Interact(transform);
+                                target.GetComponent<IInteractable>().Interact(transform);
                             }
                         }
                         //hand not empty interacted with label
-                        if (highlight.GetComponent<Label>() != null)
+                        if (target.GetComponent<Label>() != null)
                         {
-                            highlight.GetComponent<IInteractable>().Interact(transform);
+                            target.GetComponent<IInteractable>().Interact(transform);
                         }
                         //hand not empty interacted with NPC
-                        if (highlight.GetComponent<NPC>() != null)
+                        if (target.GetComponent<NPC>() != null)
                         {
-                            highlight.GetComponent<IInteractable>().Interact(transform);
+                            target.GetComponent<IInteractable>().Interact(transform);
                         }
                     }
                 }
@@ -123,41 +125,57 @@ public class InteractHandler : MonoBehaviour
     //    }
     //}
 
-
     void Update()
     {
-        // Highlight
-        if (highlight != null)
-        {
-            if(highlight.gameObject.GetComponent<Outline>() != null)
-            {
-                highlight.gameObject.GetComponent<Outline>().enabled = false;
-                highlight.gameObject.GetComponent<Outline>().HideOutline();
-                highlight = null;
-            }
-            
-        }
-        Debug.DrawRay(cameraTransform.position, cameraTransform.forward * interactDistance, Color.red);
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit raycastHit, interactDistance, interactableLayer))
-        {
-            highlight = raycastHit.transform;
-            if (highlight != selection)
-            {
-                if (highlight.gameObject.GetComponent<Outline>() != null)
-                {
-                    highlight.gameObject.GetComponent<Outline>().enabled = true;
-                    highlight.gameObject.GetComponent<Outline>().ShowOutline();
-                }
-                if(highlight.gameObject.GetComponent<Item>() != null)
-                {
-                    TooltipScreenSpaceUI.ShowTooltip_Static(highlight.gameObject.GetComponent<Item>().itemName, highlight.gameObject.GetComponent<Item>().itemDesc, highlight.gameObject.GetComponent<Item>().itemType, highlight.gameObject.GetComponent<Item>().itemPrice);
-                }
-            }
-            else
-            {
-                highlight = null;
-            }
-        }
+        //if(selection != null)
+        //{
+        //    Outline outline = selection.gameObject.GetComponent<Outline>();
+        //    outline.ShowOutline();
+        //}
+
+        //// Raycast iþlemi
+        //Debug.DrawRay(cameraTransform.position, cameraTransform.forward * interactDistance, Color.red);
+        //if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit raycastHit, interactDistance, interactableLayer))
+        //{
+        //    // Yeni hedefe bakýyoruz
+        //    target = raycastHit.transform;
+
+        //    if (target != selection)  // Ayný hedef deðilse
+        //    {
+        //        Outline outline = target.gameObject.GetComponent<Outline>();
+        //        Debug.Log(outline);
+        //        if (outline != null)
+        //        {
+        //            selection = target;
+        //        }
+
+        //        // Tooltip gösterme iþlemi
+        //        Item item = target.gameObject.GetComponent<Item>();
+        //        if (item != null)
+        //        {
+        //            TooltipScreenSpaceUI.ShowTooltip_Static(item.itemName, item.itemDesc, item.itemType, item.itemPrice);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Eðer highlight selection ile aynýysa sýfýrla
+        //        target = null;
+        //    }
+        //}
+        //else
+        //{
+        //    if(selection != null) // Eðer selection null deðilse (yani bir þey seçiliyse)
+        //    {
+        //        Outline outline = selection.gameObject.GetComponent<Outline>();
+        //        outline.HideOutline();
+        //        selection = null;
+        //    }
+
+        //}
+
+        
+
+
     }
 
 }

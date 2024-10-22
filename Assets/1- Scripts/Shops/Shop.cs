@@ -25,6 +25,12 @@ public class Shop : MonoBehaviour
 
 
 
+    public SO_Item GetExistingItemFromShop()
+    {   
+        if(itemList.Count == 0) return null;
+        return itemList[Random.Range(0, itemList.Count)]._SOItem;
+    }
+
     public bool IsShopHaveItem(SO_Item _SOItem)
     {
         for (int i = 0; i < itemList.Count; i++)

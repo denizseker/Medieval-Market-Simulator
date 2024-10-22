@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Xml.Linq;
 
 public class Item : MonoBehaviour , IPickable , IInteractable
 {
@@ -68,7 +69,9 @@ public class Item : MonoBehaviour , IPickable , IInteractable
         transform.parent = _handPos.transform;
         //Animation gonna start so setting the bool
         isAnimCompleted = false;
-
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.interpolation = RigidbodyInterpolation.None;
+        rb.isKinematic = true;
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(transform.DOLocalMove(new Vector3(0, 0, 0), 0.5f))
             .Join(transform.DOLocalRotate(new Vector3(-35, 0, 90), 0.5f))
@@ -80,7 +83,8 @@ public class Item : MonoBehaviour , IPickable , IInteractable
             });
 
         //Destroying rigidbody for unwanted movements
-        Destroy(GetComponent<Rigidbody>());
+        
+        //Destroy(GetComponent<Rigidbody>());
     }
 
     public void DropToGround()

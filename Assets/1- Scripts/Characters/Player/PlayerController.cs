@@ -9,20 +9,15 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
-    public SO_Item deneme;
-
     [SerializeField] private float _speed = 0.1f;
-    [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _headTransform;
-
     public Transform _handPos;
 
-    [SerializeField] private LayerMask _interactable;
-
     public Item _itemInHand;
-    public Rigidbody _rbPlayer;
+    [HideInInspector] public Rigidbody _rbPlayer;
     private Vector2 _moveInput;
     private Vector3 move;
+    private Transform _cameraTransform;
 
     private InputActionMap playerMap;
     private InputActionMap uiMap;
@@ -45,6 +40,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _cameraTransform = Camera.main.transform;
         var actions = GetComponent<PlayerInput>().actions;
         playerMap = actions.FindActionMap("Player");
         uiMap = actions.FindActionMap("UI");

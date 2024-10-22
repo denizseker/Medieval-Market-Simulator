@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public List<SO_Item> SOItemList = new List<SO_Item>();
     public List<NPC_Customer> npcCustomerList = new List<NPC_Customer>();
 
-    
+    public bool RandomOrExistingItem;
 
 
     //events
