@@ -101,6 +101,10 @@ public class InteractHandler : MonoBehaviour
                         {
                             target.GetComponent<IInteractable>().Interact(transform);
                         }
+                        if (target.GetComponent<Door>() != null)
+                        {
+                            target.GetComponent<IInteractable>().Interact(transform);
+                        }
                     }
                 }
             }
